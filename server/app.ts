@@ -3,6 +3,8 @@ import express, { Request, Response, NextFunction } from "express";
 export const app = express();
 import cors from "cors";
 import dotenv from "dotenv";
+import { ErrorMiddleware } from "./middleware/error";
+import userRouter from "./routes/user.route";
 
 dotenv.config();
 
@@ -18,6 +20,11 @@ app.use(
     origin: process.env.Origin,
   })
 );
+
+app.use(ErrorMiddleware);
+
+// routes
+app.use("/api/v1", userRouter);
 
 // testing route
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
