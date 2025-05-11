@@ -1,0 +1,30 @@
+{
+  "CatchAsyncError Function Template": {
+    "prefix": "catchasync",
+    "body": [
+      "export const ${1:funcName} = CatchAsyncError(",
+      "  async (req: Request, res: Response, next: NextFunction) => {",
+      "    try {",
+      "      $2",
+      "      res.status(201).json({",
+      "        success: true,",
+      "        ${3:data}",
+      "      });",
+      "    } catch (error: any) {",
+      "      return next(new ErrorHandler(error.message, 400));",
+      "    }",
+      "  }",
+      ");"
+    ],
+    "description": "Async controller wrapped with CatchAsyncError and default success response"
+  },
+  "Guard Clause with ErrorHandler": {
+    "prefix": "guard",
+    "body": [
+      "if (!${1:property}) {",
+      "  return next(new ErrorHandler(\"${2:message}\", ${3:400}));",
+      "}"
+    ],
+    "description": "Guard clause that throws an error using ErrorHandler if a property is missing"
+  }
+}

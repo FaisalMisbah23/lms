@@ -5,6 +5,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/user.route";
+import morgan from "morgan";
+import courseRouter from "./routes/course.route";
+import orderRouter from "./routes/order.route";
+import notificationRouter from "./routes/notification.route";
+import analyticsRouter from "./routes/analytics.routes";
+import layoutRouter from "./routes/layout.route";
 
 dotenv.config();
 
@@ -24,7 +30,15 @@ app.use(
 app.use(ErrorMiddleware);
 
 // routes
-app.use("/api/v1", userRouter);
+app.use(
+  "/api/v1",
+  userRouter,
+  courseRouter,
+  orderRouter,
+  notificationRouter,
+  analyticsRouter,
+  layoutRouter
+);
 
 // testing route
 app.get("/test", (req: Request, res: Response, next: NextFunction) => {
