@@ -10,30 +10,29 @@ export const ErrorMiddleware = (
   err.statusCode = err.statusCode || 500;
   err.message = err.message || "Internal server error";
 
-  // wrong mongodb id error
-  if (err.name == "CastError") {
-    const message = `Resources not found, Invalid : ${err.path}`;
+  // Invalid MongoDB ObjectId
+  if (err.name === "CastError") {
+    const message = `Resource not found. Invalid ${err.path}`;
     err = new ErrorHandler(message, 400);
   }
 
-  // duplicate key error
-  if (err.code == 11000) {
-    const message = `Duplicate ${Object.keys(err.keyValue)} entered`;
+  // Duplicate key error
+  if (err.code === 11000) {
+    const message = `Duplicate field value entered: ${Object.keys(err.keyValue).join(", ")}`;
     err = new ErrorHandler(message, 400);
   }
 
-  // wrong jwt error
-  if (err.name == "JsonWebTokenError") {
-    const message = `Json web token is invalid, try again`;
-    err = new ErrorHandler(message, 400);
+  // JWT error
+  if (err.name === "JsonWebTokenError") {
+    err = new ErrorHandler("Invalid token. Please try again.", 400);
   }
 
-  // jwt expired error
-  if (err.name == "TokenExpiredError") {
-    const message = `Json web token is expired, try again`;
-    err = new ErrorHandler(message, 400);
+  // JWT expired
+  if (err.name === "TokenExpiredError") {
+    err = new ErrorHandler("Token has expired. Please log in again.", 400);
   }
 
+  // Send consistent JSON response
   res.status(err.statusCode).json({
     success: false,
     message: err.message,

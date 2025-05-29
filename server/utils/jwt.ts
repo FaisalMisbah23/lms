@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import { IUser } from "../models/user.model";
 import { Response } from "express";
 import { redis } from "./redis";
+import ErrorHandler from "./ErrorHandler";
 
 dotenv.config();
 
@@ -24,36 +25,48 @@ export const refreshTokenExpires = parseInt(
 );
 
 export const accessTokenOptions: ITokenOptions = {
-  expires: new Date(Date.now() * accessTokenExpires * 60 * 1000),
+  expires: new Date(Date.now() + accessTokenExpires * 60 * 1000),
   maxAge: accessTokenExpires * 60 * 1000,
   httpOnly: true,
   sameSite: "lax",
 };
 export const refreshTokenOptions: ITokenOptions = {
-  expires: new Date(Date.now() * refreshTokenExpires * 24 * 60 * 1000),
+  expires: new Date(Date.now() + refreshTokenExpires * 24 * 60 * 1000),
   maxAge: refreshTokenExpires * 24 * 60 * 1000,
   httpOnly: true,
   sameSite: "lax",
 };
 
-export const sendToken = (user: IUser, statusCode: number, res: Response) => {
-  const accessToken = user.signAccessToken();
-  const refreshToken = user.signRefreshToken();
+export const sendToken = async (
+  user: IUser,
+  statusCode: number,
+  res: Response
+) => {
+  try {
+    const accessToken = user.signAccessToken();
+    const refreshToken = user.signRefreshToken();
 
-  // update session to redis
-  redis.set(user._id, JSON.stringify(user) as any);
+    // update session to redis
+    await redis.set(user._id as string, JSON.stringify(user) as any);
 
-  // only set secure to true in production
-  if (process.env.NODE_ENV === "PRODUCTION") {
-    accessTokenOptions.secure = true;
+    // only set secure to true in production
+    if (process.env.NODE_ENV === "PRODUCTION") {
+      accessTokenOptions.secure = true;
+    }
+
+    res.cookie("access_token", accessToken, accessTokenOptions);
+    res.cookie("refresh_token", refreshToken, refreshTokenOptions);
+
+    res.status(statusCode).json({
+      success: true,
+      user,
+      accessToken,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
   }
-
-  res.cookie("access_token", accessToken, accessTokenOptions);
-  res.cookie("refresh_token", refreshToken, refreshTokenOptions);
-
-  res.status(statusCode).json({
-    success: true,
-    user,
-    accessToken,
-  });
 };

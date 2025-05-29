@@ -19,6 +19,7 @@ import {
   updateUserRoleService,
 } from "../services/user.service";
 import cloudinary from "cloudinary";
+import { isValidObjectId } from "mongoose";
 
 dotenv.config();
 
@@ -141,7 +142,7 @@ export const loginUser = CatchAsyncError(
 
       const user = await User.findOne({ email }).select("+password");
       if (!user) {
-        return next(new ErrorHandler("Invalid email!", 400));
+        return next(new ErrorHandler("user not found!", 400));
       }
       const isPasswordCorrect = await user.comparePassword(password);
 
@@ -235,6 +236,9 @@ export const getUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = req.user?._id;
+      if (typeof userId !== "string") {
+        return next(new ErrorHandler("Invalid user id!", 400));
+      }
       await getUserById(userId, res);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
@@ -279,22 +283,13 @@ interface IUpdateUserInfo {
 export const updateUserInfo = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { name, email } = req.body as IUpdateUserInfo;
+      const { name } = req.body as IUpdateUserInfo;
       const userId = req.user?._id as string;
       if (!userId) {
         return next(new ErrorHandler("User id is missing!", 400));
       }
 
       const user = await User.findById(userId);
-
-      if (email && user) {
-        const isEmailExist = await User.findOne({ email });
-
-        if (isEmailExist) {
-          return next(new ErrorHandler("Email already exists!", 400));
-        }
-        user.email = email;
-      }
 
       if (name && user) {
         user.name = name;
@@ -329,6 +324,7 @@ export const updatePassword = CatchAsyncError(
         return next(new ErrorHandler("Enter old and new passwords!", 400));
       }
       const user = await User.findById(req.user?._id).select("+password");
+
       if (!user?.password === undefined) {
         return next(new ErrorHandler("Invalid user!", 400));
       }
@@ -345,7 +341,9 @@ export const updatePassword = CatchAsyncError(
 
       await user?.save();
 
-      await redis.set(user?._id, JSON.stringify(user));
+      if (user && user._id) {
+        await redis.set(user._id.toString(), JSON.stringify(user));
+      }
 
       res.status(201).json({
         success: true,
@@ -392,7 +390,10 @@ export const updateProfilePicture = CatchAsyncError(
       };
 
       await user.save();
-      await redis.set(userId, JSON.stringify(user));
+
+      if (user && user._id) {
+        await redis.set(user._id.toString(), JSON.stringify(user));
+      }
 
       res.status(201).json({
         success: true,

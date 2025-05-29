@@ -17,17 +17,16 @@ dotenv.config();
 // body parser
 app.use(express.json({ limit: "50mb" }));
 
-// cookie parser
-app.use(cookieParser());
-
 // cors
 app.use(
   cors({
-    origin: process.env.Origin,
+    origin: process.env.Origin || "http://localhost:3000",
+    credentials: true,
   })
 );
 
-app.use(ErrorMiddleware);
+// cookie parser
+app.use(cookieParser());
 
 // routes
 app.use(
@@ -54,3 +53,5 @@ app.all(/(.*)/, (req: Request, res: Response, next: NextFunction) => {
   err.statusCode = 404;
   next(err);
 });
+
+app.use(ErrorMiddleware);
