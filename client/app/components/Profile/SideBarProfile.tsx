@@ -16,6 +16,7 @@ type Props = {
     logOutHandler: () => void
 }
 const SideBarProfile: FC<Props> = ({ user, active, avatar, setActive, logOutHandler }) => {
+    console.log("🚀 ~ user:", user)
     return (
 
         <div className="w-full">

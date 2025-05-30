@@ -3,6 +3,7 @@
         "Elearning",
         "Forgetpasswordotp",
         "NEXTAUTH",
+        "prereq",
         "socialimage"
     ]
 }
