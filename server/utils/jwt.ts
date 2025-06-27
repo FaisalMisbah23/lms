@@ -29,14 +29,14 @@ export const accessTokenOptions: ITokenOptions = {
   maxAge: accessTokenExpires * 60 * 1000,
   httpOnly: true,
   sameSite: "lax",
-  secure: process.env.NODE_ENV === "PRODUCTION" ? true : false,
+  secure: true,
 };
 export const refreshTokenOptions: ITokenOptions = {
   expires: new Date(Date.now() + refreshTokenExpires * 24 * 60 * 1000),
   maxAge: refreshTokenExpires * 24 * 60 * 1000,
   httpOnly: true,
   sameSite: "lax",
-  secure: process.env.NODE_ENV === "PRODUCTION" ? true : false,
+  secure: true,
 };
 
 export const sendToken = async (
