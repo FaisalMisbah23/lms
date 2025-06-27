@@ -29,12 +29,14 @@ export const accessTokenOptions: ITokenOptions = {
   maxAge: accessTokenExpires * 60 * 1000,
   httpOnly: true,
   sameSite: "lax",
+  secure: process.env.NODE_ENV === "PRODUCTION" ? true : false,
 };
 export const refreshTokenOptions: ITokenOptions = {
   expires: new Date(Date.now() + refreshTokenExpires * 24 * 60 * 1000),
   maxAge: refreshTokenExpires * 24 * 60 * 1000,
   httpOnly: true,
   sameSite: "lax",
+  secure: process.env.NODE_ENV === "PRODUCTION" ? true : false,
 };
 
 export const sendToken = async (
@@ -48,11 +50,6 @@ export const sendToken = async (
 
     // update session to redis
     await redis.set(user._id as string, JSON.stringify(user) as any);
-
-    // only set secure to true in production
-    if (process.env.NODE_ENV === "PRODUCTION") {
-      accessTokenOptions.secure = true;
-    }
 
     res.cookie("access_token", accessToken, accessTokenOptions);
     res.cookie("refresh_token", refreshToken, refreshTokenOptions);

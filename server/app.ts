@@ -20,7 +20,7 @@ app.use(express.json({ limit: "50mb" }));
 // cors
 app.use(
   cors({
-    origin: process.env.Origin || "http://localhost:3000",
+    origin: process.env.ORIGIN || "http://localhost:3000",
     credentials: true,
   })
 );
