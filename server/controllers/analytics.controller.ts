@@ -10,7 +10,7 @@ import Order from "../models/order.model";
 export const getUserAnalytics = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const users = await generateLast12MonthsData(User);
+      const users = await generateLast12MonthsData(User as any);
       res.status(201).json({
         success: true,
         users,
@@ -25,7 +25,7 @@ export const getUserAnalytics = CatchAsyncError(
 export const getCoursesAnalytics = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const courses = await generateLast12MonthsData(Course);
+      const courses = await generateLast12MonthsData(Course as any);
       res.status(201).json({
         success: true,
         courses,
@@ -40,7 +40,7 @@ export const getCoursesAnalytics = CatchAsyncError(
 export const getOrdersAnalytics = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const orders = await generateLast12MonthsData(Order);
+      const orders = await generateLast12MonthsData(Order as any);
       res.status(201).json({
         success: true,
         orders,

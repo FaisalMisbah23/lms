@@ -15,6 +15,7 @@ import avatar from "../../public/assests/avatardefault.jpg";
 import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 
 
 interface HeaderProps {
@@ -33,27 +34,41 @@ const Header: FC<HeaderProps> = ({
 }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
+  const [logout, setLogout] = useState(false);
   const { user } = useSelector((state: any) => state.auth)
+  const { data: userData, isLoading, refetch } = useLoadUserQuery(undefined, {
+    skip: !logout ? true : false,
+  })
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
 
 
   useEffect(() => {
 
-    if (!user) {
-      if (data) {
-        socialAuth({
-          email: data?.user?.email as string,
-          name: data?.user?.name as string,
-          socialimage: data.user?.image as string,
-        });
+    if (!isLoading) {
+      if (!userData) {
+        if (data) {
+          socialAuth({
+            email: data?.user?.email as string,
+            name: data?.user?.name as string,
+            avatar: data.user?.image as string,
+          });
+          refetch();
+        }
+      }
 
+      if (data === null) {
+        if (isSuccess) {
+          toast.success("login successfully!")
+        }
       }
-      if (isSuccess) {
-        toast.success("login successfully")
+
+      if (data === null && !isLoading && !userData) {
+        setLogout(true);
       }
+
     }
-  }, [data, isSuccess, error, socialAuth]);
+  }, [data, userData, isLoading]);
 
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
@@ -101,12 +116,12 @@ const Header: FC<HeaderProps> = ({
                     onClick={() => setOpenSidebar(true)}
                   />
                 </div>
-                {user ? (
+                {userData ? (
                   <Link href={"/profile"}>
                     <Image
                       src={
-                        user.avatar
-                          ? user.avatar.url
+                        userData?.user.avatar
+                          ? userData?.user.avatar.url
                           : avatar
                       }
                       alt=""
@@ -169,8 +184,7 @@ const Header: FC<HeaderProps> = ({
                 setRoute={setRoute}
                 activeItem={activeItem}
                 component={Login}
-
-
+                refetch={refetch}
               />
             )}
           </>
@@ -186,6 +200,7 @@ const Header: FC<HeaderProps> = ({
                 setRoute={setRoute}
                 activeItem={activeItem}
                 component={SignUp}
+                refetch={refetch}
               />
             )}
           </>
@@ -208,6 +223,7 @@ const Header: FC<HeaderProps> = ({
                 setRoute={setRoute}
                 activeItem={activeItem}
                 component={Verification}
+                refetch={refetch}
               />
             )}
           </>

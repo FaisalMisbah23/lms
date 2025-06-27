@@ -1,7 +1,7 @@
 "use client"
 
 import { styles } from "@/app/style/style"
-import { useGetHeroDataQuery } from "../../../../redux/features/layout/layoutApi";
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 import { useEffect } from "react";
 import { type FC, useState } from "react"
 
@@ -155,8 +155,8 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                             name=""
                             id=""
                             className="w-full text-black dark:text-white bg-transparent border rounded h-[40px] px-2 outline-none mt-[10px] font-Poppins"
-                            value={courseInfo.category}
-                            onChange={(e: any) => setCourseInfo({ ...courseInfo, category: e.target.value })}
+                            value={courseInfo.categories}
+                            onChange={(e: any) => setCourseInfo({ ...courseInfo, categories: e.target.value })}
                         >
                             <option className="bg-[#1c2024]" value="">
                                 Select Category

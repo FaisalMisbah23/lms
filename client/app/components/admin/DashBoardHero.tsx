@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import DashboardHeader from "./DashBoardHeader";
-import DashboardWidgets from "./Wigets/DashboardWidgets";
+import DashboardWidgets from "./Widgets/DashboardWidgets";
 
 
 type Props = {

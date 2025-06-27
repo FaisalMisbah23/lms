@@ -1,11 +1,10 @@
 'use client'
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import Image from "next/image";
 import avatarDefault from "../../../public/assests/avatardefault.jpg";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { SiCoursera } from "react-icons/si";
 import { BiLogOutCircle } from "react-icons/bi";
-
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import Link from "next/link";
 type Props = {
@@ -16,7 +15,7 @@ type Props = {
     logOutHandler: () => void
 }
 const SideBarProfile: FC<Props> = ({ user, active, avatar, setActive, logOutHandler }) => {
-    console.log("🚀 ~ user:", user)
+
     return (
 
         <div className="w-full">

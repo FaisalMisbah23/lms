@@ -18,10 +18,10 @@ interface Layout extends Document {
   type: string;
   faqs: faqItems[];
   categories: Category[];
-  bannerImage: {
+  banner: {
     image: BannerImage;
-    title: string;
-    subtitle: string;
+    title: { type: String };
+    subTitle: { type: String };
   };
 }
 
@@ -43,10 +43,10 @@ const layoutSchema = new mongoose.Schema<Layout>({
   type: { type: String },
   faqs: [faqSchema],
   categories: [categorySchema],
-  bannerImage: {
+  banner: {
     image: bannerImageSchema,
     title: { type: String },
-    subtitle: { type: String },
+    subTitle: { type: String },
   },
 });
 

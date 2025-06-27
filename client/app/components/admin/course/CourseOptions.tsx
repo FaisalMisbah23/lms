@@ -41,8 +41,8 @@ const CourseOptions: FC<Props> = ({ active }) => {
           </div>
           <h5
             className={`p-3 800px:pl-3 ${active === index
-                ? "dark:text-white text-black"
-                : "dark:text-white text-black"
+              ? "dark:text-white text-black"
+              : "dark:text-white text-black"
               } text-[10px] 800px:text-[20px]`}
           >
             {option}

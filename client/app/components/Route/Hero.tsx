@@ -6,9 +6,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FC, useState } from "react";
+import { useState } from "react";
 import { BiSearch } from "react-icons/bi";
 import Loader from "../Loader/Loader";
+import { useGetHeroDataQuery } from "@/redux/features/layout/layoutApi";
 
 import Client1 from "../../../public/assests/client-1.jpg";
 import Client2 from "../../../public/assests/client-2.jpg";
@@ -17,12 +18,10 @@ import Client3 from "../../../public/assests/client-3.jpg";
 // Hero component for the landing page
 // Displays a banner image, title, subtitle, search functionality, and trust indicators
 
-type Props = {};
-
 // Props type definition for the Hero component
 // Currently empty, but can be extended for future use
 
-const Hero: FC<Props> = (props) => {
+const Hero = () => {
   const clients = [Client1, Client2, Client3];
 
   // State for the search input
@@ -32,9 +31,9 @@ const Hero: FC<Props> = (props) => {
 
 
 
-//   const { data, isLoading } = useGetHeroDataQuery("Banner", {
-//     refetchOnMountOrArgChange: true,
-//   });
+  const { data, isLoading } = useGetHeroDataQuery("Banner", {
+    refetchOnMountOrArgChange: true,
+  });
 
 
 
@@ -51,9 +50,9 @@ const Hero: FC<Props> = (props) => {
   return (
     <>
       {/* Render loader while data is being fetched */}
-      {/* {isLoading ? (
+      {isLoading ? (
         <Loader />
-      ) : ( */}
+      ) : (
 
         <div className="w-full min-h-screen flex flex-col lg:flex-row items-center justify-center lg:justify-between px-4 lg:px-8 py-10 lg:py-0 relative overflow-hidden">
           {/* Animated background circle */}
@@ -62,8 +61,8 @@ const Hero: FC<Props> = (props) => {
           <div className="lg:w-1/2 flex items-center justify-center z-10 mb-8 lg:mb-0">
             <Image
               src={
-           
-                require("../../../public/assests/hero-banner-1.png")
+
+                data?.layout?.banner?.image?.url
               }
               width={400}
               height={400}
@@ -76,12 +75,12 @@ const Hero: FC<Props> = (props) => {
             {/* Main headline */}
             <h1 className="text-3xl lg:text-5xl font-bold text-gray-800 dark:text-white mb-4 leading-tight">
               {
-                "Improve Your Online Learning Experience"}
+                data?.layout?.banner?.title}
             </h1>
             {/* Subtitle or description */}
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 max-w-lg">
               {
-                "We have 20K+ Online courses & 500k+ Online registered students. Find your desired courses from them."}
+                data?.layout?.banner?.subTitle}
             </p>
             {/* Search form */}
             <form onSubmit={handleSearch} className="w-full max-w-md mb-8">
@@ -125,7 +124,7 @@ const Hero: FC<Props> = (props) => {
             </div>
           </div>
         </div>
-      {/* )} */}
+      )}
     </>
   );
 };

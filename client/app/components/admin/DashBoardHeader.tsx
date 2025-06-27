@@ -1,37 +1,15 @@
 "use client"
 
-import { FC, useState } from "react"
+import { FC, useEffect, useRef, useState } from "react"
 import { IoMdNotificationsOutline } from "react-icons/io"
 import { format } from "timeago.js"
 import ThemeSwitcher from "../../../app/utils/ThemeSwitcher"
+import socketIO from "socket.io-client"
+import { useGetAllNotificationsQuery, useUpdateNotificationStatusMutation } from "@/redux/features/notifications/notificationApi"
+const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || ""
+const socketId = socketIO(ENDPOINT, { transports: ["websocket"] })
 
 // Static notifications data
-const notifications = [
-    {
-        _id: "1",
-        title: "New Message",
-        message: "You have received a new message from John Doe.",
-        createdAt: new Date().toISOString(),
-    },
-    {
-        _id: "2",
-        title: "System Update",
-        message: "A new system update is available. Click here to update.",
-        createdAt: new Date().toISOString(),
-    },
-    {
-        _id: "3",
-        title: "Reminder",
-        message: "Your meeting with the team starts in 30 minutes.",
-        createdAt: new Date().toISOString(),
-    },
-    {
-        _id: "4",
-        title: "New Comment",
-        message: "Alice commented on your post: 'Great work!'",
-        createdAt: new Date().toISOString(),
-    },
-]
 
 type Props = {
     open?: boolean
@@ -40,6 +18,49 @@ type Props = {
 
 const DashboardHeader: FC<Props> = () => {
     const [isOpen, setIsOpen] = useState(false)
+
+    const [notifications, setNotifications] = useState<any[]>([])
+    const { data, refetch } = useGetAllNotificationsQuery(undefined, {
+        refetchOnMountOrArgChange: true,
+    })
+    const [updateNotificationStatus, { isSuccess }] = useUpdateNotificationStatusMutation()
+
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            audioRef.current = new Audio(
+                "https://res.cloudinary.com/dasdrngo1/video/upload/v1715355770/notifications/mixkit-bubble-pop-up-alert-notification-2357_wbwviv.wav"
+            );
+        }
+    }, []);
+
+
+    const playNotificationSound = () => {
+        audioRef.current?.play().catch((err) => {
+            console.error("Audio play failed:", err);
+        });
+    };
+
+    useEffect(() => {
+        if (data) {
+            setNotifications(data.notifications.filter((item: any) => item.status === "unread"))
+        }
+        if (isSuccess) {
+            refetch();
+        }
+    }, [data, isSuccess])
+
+    useEffect(() => {
+        socketId.on("newNotification", (data) => {
+            refetch()
+            playNotificationSound();
+        })
+    }, [])
+
+    const handleNotificationStatusChange = async (id: string) => {
+        await updateNotificationStatus(id);
+    }
 
     return (
         <div className="w-full flex items-center justify-end p-6 fixed top-5 right-0 z-[9999999]">
@@ -65,7 +86,8 @@ const DashboardHeader: FC<Props> = () => {
                         >
                             <div className="w-full flex items-center justify-between p-2">
                                 <p className="text-black dark:text-white">{item.title}</p>
-                                <p className="text-black dark:text-white cursor-pointer opacity-50">
+                                <p className="text-black dark:text-white cursor-pointer opacity-50"
+                                    onChange={() => handleNotificationStatusChange(item._id)}>
                                     Mark as read
                                 </p>
                             </div>

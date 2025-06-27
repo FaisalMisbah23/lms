@@ -1,11 +1,13 @@
 "use client"
 
-import { type FC, useState } from "react"
+import { type FC, useEffect, useState } from "react"
 import SideBarProfile from "./SideBarProfile"
 import { useLogOutMutation } from "@/redux/features/auth/authApi"
 import { signOut, useSession } from "next-auth/react"
 import ProfileInfo from "./ProfileInfo"
 import ChangePassword from "./ChangePassword"
+import { useGetUserAllCoursesQuery } from "@/redux/features/courses/coursesApi"
+import CourseCard from "../Course/CourseCard"
 
 type Props = { user: any }
 
@@ -14,6 +16,8 @@ const Profile: FC<Props> = ({ user }) => {
     const [avatar, setAvatar] = useState("")
     const [active, setActive] = useState(1)
     const [logout, setLogOut] = useState(false)
+    const [courses, setCourses] = useState<any>([]);
+    const { data, isLoading } = useGetUserAllCoursesQuery(undefined, {});
 
     const { data: session } = useSession()
 
@@ -36,6 +40,15 @@ const Profile: FC<Props> = ({ user }) => {
         })
     }
 
+    useEffect(() => {
+        if (data) {
+            const filteredCourses = user.courses
+                .map((userCourse: any) => data.courses.find((course: any) => userCourse._id === course._id))
+                .filter((course: any) => course !== undefined);
+            setCourses(filteredCourses);
+        }
+    }, [data, user.courses]);
+
     return (
         <div className="w-[85%] flex mx-auto">
             <div
@@ -52,19 +65,33 @@ const Profile: FC<Props> = ({ user }) => {
 
             </div>
 
-            {active === 1 && (
-                <div className="w-full h-full bg-transparent mt-[80px]">
-                    <ProfileInfo avatar={avatar} user={user} />
-                </div>
-            )}
-
-            {active === 2 && (
-                <div className="w-full h-full bg-transparent mt-[80px]">
-                    <ChangePassword />
-                </div>
-            )}
+            <div className="w-full h-full bg-transparent mt-20">
+                {active === 1 && <ProfileInfo user={user} avatar={avatar} />}
+                {active === 2 && <ChangePassword />}
+                {active === 3 && (
+                    <div className="w-full pl-7 px-2 800px:px-10 800px:pl-8">
+                        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-2 lg:gap-6 xl:grid-cols-3 xl:gap-[35px]">
+                            {courses &&
+                                courses.map((item: any, index: number) => (
+                                    <CourseCard
+                                        item={item}
+                                        key={index}
+                                        // user={user}
+                                        isProfile={true}
+                                    />
+                                ))}
+                        </div>
+                        {courses.length === 0 && (
+                            <h1 className="text-center text-[18px] font-Poppins">
+                                You don&apos;t have any purchased courses!
+                            </h1>
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
-    )
-}
+    );
+};
+
 
 export default Profile

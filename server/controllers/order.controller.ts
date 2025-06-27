@@ -11,8 +11,8 @@ import { IOrder } from "../models/order.model";
 import User from "../models/user.model";
 import { getAllOrdersService, newOrder } from "../services/order.service";
 import Notification from "../models/notification.model";
-
 dotenv.config();
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 // create order
 export const createOrder = CatchAsyncError(
@@ -20,10 +20,22 @@ export const createOrder = CatchAsyncError(
     try {
       const { courseId, payment_info } = req.body as IOrder;
 
+      if (payment_info) {
+        if ("id" in payment_info) {
+          const paymentIntentId = payment_info.id;
+          const paymentIntent = await stripe.paymentIntents.retrieve(
+            paymentIntentId
+          );
+          if (paymentIntent.status !== "succeeded") {
+            return next(new ErrorHandler("Payment not authorized!", 400));
+          }
+        }
+      }
+
       const user = await User.findById(req.user?._id);
 
       const courseExistInUser = user?.courses.find(
-        (course) => course._id.toString() === courseId
+        (course: any) => (course.courseId || course._id?.toString?.()) === courseId
       );
 
       if (courseExistInUser) {
@@ -46,7 +58,7 @@ export const createOrder = CatchAsyncError(
 
       const mailData = {
         order: {
-          _id: course._id.toString().slice(0, 6),
+          _id: typeof course._id === 'string' ? course._id.slice(0, 6) : (course._id?.toString?.().slice(0, 6) || ""),
           name: course.name,
           price: course.price,
           date: new Date().toLocaleString("en-US", {
@@ -72,14 +84,15 @@ export const createOrder = CatchAsyncError(
           });
         }
       } catch (error) {
-        return next(new ErrorHandler(error.message, 400));
+        return next(new ErrorHandler((error as Error).message, 400));
       }
 
-      await user?.courses.push(course._id);
+      if (user) {
+        user.courses.push({ courseId: String(course._id) });
+        await user.save();
+      }
 
-      await user?.save();
-
-      await redis.set(req.user?._id, JSON.stringify(user));
+      await redis.set(String(req.user?._id), JSON.stringify(user));
 
       await Notification.create({
         user: user?._id,
@@ -87,7 +100,7 @@ export const createOrder = CatchAsyncError(
         message: `You have a new order from ${course.name}`,
       });
 
-      course.purchased ? (course.purchased += 1) : course.purchased;
+      course.purchased = (course.purchased || 0) + 1;
       await course.save();
 
       newOrder(data, res, next);
@@ -104,6 +117,44 @@ export const getAllOrders = CatchAsyncError(
       getAllOrdersService(res);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// send stripe publishAble key
+export const sendStripeKey = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.status(200).json({
+        stripePublishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// new payment
+export const newPayment = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const myPayment = await stripe.paymentIntents.create({
+        amount: req.body.amount,
+        currency: "USD",
+        metadata: {
+          company: "E-Learning",
+        },
+        automatic_payment_methods: {
+          enabled: true,
+        },
+      });
+
+      res.status(201).json({
+        success: true,
+        client_secret: myPayment.client_secret,
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 500));
     }
   }
 );

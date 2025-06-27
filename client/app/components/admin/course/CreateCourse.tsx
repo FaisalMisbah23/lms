@@ -6,10 +6,10 @@ import CourseData from "./CourseData"
 import { redirect } from "next/navigation"
 import CourseContent from "./CourseContent"
 import CoursePreview from "./CoursePreview"
-type Props = {}
 import { useCreateCourseMutation } from "@/redux/features/courses/coursesApi"
 import toast from "react-hot-toast"
-const CreateCourse = (props: Props) => {
+
+const CreateCourse = () => {
     const [active, setActive] = useState(0)
     const [createCourse, { isLoading, isSuccess, error }] = useCreateCourseMutation()
 
@@ -38,7 +38,7 @@ const CreateCourse = (props: Props) => {
         description: "",
         price: "",
         estimatedPrice: "",
-        category: "",
+        categories: "",
         tags: "",
         level: "",
         demoUrl: "",
@@ -93,7 +93,7 @@ const CreateCourse = (props: Props) => {
             name: courseInfo.name,
             description: courseInfo.description,
             price: courseInfo.price,
-            category: courseInfo.category,
+            categories: courseInfo.categories,
             estimatedPrice: courseInfo.estimatedPrice,
             tags: courseInfo.tags,
             thumbnail: courseInfo.thumbnail,

@@ -9,7 +9,7 @@ import { redis } from "../utils/redis";
 import cloudinary from "cloudinary";
 import { createCourse, getAllCoursesService } from "../services/course.service";
 import Course from "../models/course.model";
-import mongoose from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import Notification from "../models/notification.model";
 import axios from "axios";
 
@@ -31,6 +31,13 @@ export const uploadCourse = CatchAsyncError(
           url: myCloud.url,
         };
       }
+
+      let courses = await Course.find().select(
+        "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
+      );
+
+      await redis.set("allCourses", JSON.stringify(courses));
+
       createCourse(data, res, next);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
@@ -43,32 +50,55 @@ export const editCourse = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = req.body;
-      const thumbnail = data.thumbnail;
-      if (thumbnail) {
-        const myCloud = await cloudinary.v2.uploader.upload(thumbnail, {
-          folder: "courses",
-        });
-
-        data.thumbnail = {
-          public_id: myCloud.public_id,
-          url: myCloud.url,
-        };
-      }
       const courseId = req.params.id;
-      const course = await Course.findByIdAndUpdate(
+
+      // Find the course first
+      const existingCourse = await Course.findById(courseId);
+      if (!existingCourse) {
+        return next(new ErrorHandler("Course not found", 404));
+      }
+
+      // Handle Thumbnail Update
+      if (data.thumbnail) {
+        if (data.thumbnail.url && data.thumbnail.url.startsWith("data:")) {
+          // Delete old thumbnail if it exists
+          const thumb = existingCourse.thumbnail as { public_id?: string };
+          if (thumb && thumb.public_id) {
+            await cloudinary.v2.uploader.destroy(thumb.public_id);
+          }
+
+          // 🔹 Upload new thumbnail
+          const uploadedImage = await cloudinary.v2.uploader.upload(
+            data.thumbnail.url,
+            { folder: "courses" }
+          );
+
+          // 🔹 Update thumbnail data
+          data.thumbnail = {
+            public_id: uploadedImage.public_id,
+            url: uploadedImage.secure_url,
+          };
+        } else {
+          console.log("Using existing thumbnail data:", data.thumbnail);
+        }
+      }
+
+      // Update Course Data
+      const updatedCourse = await Course.findByIdAndUpdate(
         courseId,
-        {
-          $set: data,
-        },
+        { $set: data },
         { new: true }
       );
 
-      res.status(201).json({
+      //  Return Response
+      res.status(200).json({
         success: true,
-        course,
+        message: "Course updated successfully",
+        course: updatedCourse,
       });
     } catch (error: any) {
-      return next(new ErrorHandler(error.message, 400));
+      console.error("Error updating course:", error.message);
+      return next(new ErrorHandler(error.message, 500));
     }
   }
 );
@@ -80,12 +110,16 @@ export const getSingleCourse = CatchAsyncError(
       const courseId = req.params.id;
       const isCached = await redis.get(courseId);
       let course;
-      if (isCached) {
+      if (isCached !== null) {
         course = JSON.parse(isCached);
       } else {
-        course = await Course.findById(req.params.id).select(
+        const course = await Course.findById(courseId).select(
           "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
         );
+
+        if (!course) {
+          return next(new ErrorHandler("Course not found", 404));
+        }
 
         await redis.set(
           courseId,
@@ -137,8 +171,9 @@ export const getCourseByUser = CatchAsyncError(
     try {
       const userCourseList = req.user?.courses;
       const courseId = req.params.id;
+      // get course content for valid user
       const courseExists = userCourseList?.find(
-        (course) => course._id === courseId
+        (item: any) => (item.courseId || item._id?.toString?.()) === courseId
       );
 
       if (!courseExists) {
@@ -176,8 +211,8 @@ export const addQuestion = CatchAsyncError(
         return next(new ErrorHandler("Invalid content id!", 400));
       }
 
-      const courseContent = course?.courseData.find((item) =>
-        item.equals(contentId)
+      const courseContent = course?.courseData.find(
+        (item: any) => (item._id?.toString?.() || item.id) === contentId
       );
 
       if (!courseContent) {
@@ -231,17 +266,16 @@ export const addAnswer = CatchAsyncError(
         return next(new ErrorHandler("Invalid content id!", 400));
       }
 
-      const courseContent = course?.courseData.find((item) =>
-        item.equals(contentId)
+      const courseContent = course?.courseData.find(
+        (item: any) => (item._id?.toString?.() || item.id) === contentId
+      );
+      const question = courseContent?.questions.find(
+        (item: any) => (item._id?.toString?.() || item.id) === questionId
       );
 
       if (!courseContent) {
         return next(new ErrorHandler("Invalid content id!", 400));
       }
-
-      const question = courseContent?.questions.find((item) =>
-        item.equals(questionId)
-      );
 
       if (!question) {
         return next(new ErrorHandler("Invalid question id!", 400));
@@ -251,10 +285,13 @@ export const addAnswer = CatchAsyncError(
       const newAnswer: any = {
         user: req.user,
         answer,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       // add this answer to our question
-      question?.questionReplies.push(newAnswer);
+      if (!question.questionReplies) question.questionReplies = [];
+      question.questionReplies.push(newAnswer);
 
       // save the updated course
       await course?.save();
@@ -313,7 +350,7 @@ export const addReview = CatchAsyncError(
 
       // check if courseId already exits in userCourseList base of _id
       const courseExists = userCourseList?.find(
-        (item: any) => item._id.toString() === courseId
+        (item: any) => (item.courseId || item._id?.toString?.()) === courseId
       );
 
       if (!courseExists) {
@@ -347,12 +384,18 @@ export const addReview = CatchAsyncError(
       // save the updated course
       await course?.save();
 
+      if (course && (course._id || course.id)) {
+        await redis.set(
+          course._id?.toString?.() || course.id,
+          JSON.stringify(course),
+          "EX",
+          7 * 24 * 60 * 60
+        );
+      }
       const notification = {
         title: "New Reviews Received",
         message: `${req.user?.name} has given a review on ${course?.name}`,
       };
-
-      // create notification
 
       res.status(201).json({
         success: true,
@@ -382,7 +425,9 @@ export const addReplyReview = CatchAsyncError(
         return next(new ErrorHandler("Course not found!", 400));
       }
 
-      const review = course.reviews.find((item) => item.equals(reviewId));
+      const review = course.reviews.find(
+        (item: any) => (item._id?.toString?.() || item.id) === reviewId
+      );
 
       if (!review) {
         return next(new ErrorHandler("Review not found!", 400));
@@ -391,6 +436,8 @@ export const addReplyReview = CatchAsyncError(
       const newReply: any = {
         user: req.user,
         comment,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
       };
 
       if (!review.commentReplies) {
@@ -400,6 +447,13 @@ export const addReplyReview = CatchAsyncError(
       review.commentReplies.push(newReply);
 
       await course.save();
+
+      await redis.set(
+        course._id?.toString?.() || course.id,
+        JSON.stringify(course),
+        "EX",
+        7 * 24 * 60 * 60
+      );
 
       res.status(201).json({
         success: true,
@@ -432,7 +486,13 @@ export const deleteCourse = CatchAsyncError(
       }
 
       await Course.findByIdAndDelete(course._id);
-      await redis.del(course._id);
+      await redis.del(course._id?.toString?.() || course.id);
+
+      const courses = await Course.find().select(
+        "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
+      );
+
+      await redis.set("allCourses", JSON.stringify(courses));
 
       res.status(200).json({
         success: true,

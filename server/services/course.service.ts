@@ -15,9 +15,9 @@ export const createCourse = CatchAsyncError(
 
 // get all courses
 export const getAllCoursesService = async (res: Response) => {
-  const users = await Course.find().sort({ createdAt: -1 });
+  const courses = await Course.find().sort({ createdAt: -1 });
   res.status(201).json({
     success: true,
-    users,
+    courses,
   });
 };

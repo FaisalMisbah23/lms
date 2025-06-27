@@ -1,11 +1,9 @@
 "use client";
-import React, { FC, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { BiMoon, BiSun } from "react-icons/bi";
 
-interface Props {}
-
-const ThemeSwitcher: FC<Props> = (props) => {
+const ThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 

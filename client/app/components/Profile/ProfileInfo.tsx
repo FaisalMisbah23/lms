@@ -45,7 +45,6 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
         if (error) {
             const errorMessage = error && "data" in error ? (error.data as any)?.message : "Avatar update failed"
             toast.error(errorMessage)
-            console.log(error)
         }
     }, [isSuccess, error])
 
@@ -58,7 +57,6 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
             const errorMessage =
                 updateError && "data" in updateError ? (updateError.data as any)?.message : "Profile update failed"
             toast.error(errorMessage)
-            console.log(updateError)
         }
     }, [success, updateError])
 

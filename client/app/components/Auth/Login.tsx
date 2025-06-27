@@ -33,7 +33,7 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
       const message = data?.message || "user Login successful!";
       toast.success(message);
       setOpen(false);
-      // refetch();
+      refetch();
     }
     if (error) {
       if ("data" in error) {

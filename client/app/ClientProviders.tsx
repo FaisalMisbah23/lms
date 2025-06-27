@@ -1,4 +1,3 @@
-// app/ClientProviders.tsx
 "use client";
 import { useEffect, useState } from "react";
 import { ThemeProvider } from "next-themes";
@@ -24,15 +23,13 @@ export default function ClientProviders({
   }
 
   return (
-    // <Providers>
-      <ThemeProvider 
-        attribute="class" 
-        defaultTheme="system" 
-        enableSystem
-        disableTransitionOnChange
-      >
-        {children}
-      </ThemeProvider>
-    // {/* </Providers> */}
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="system"
+      enableSystem
+      disableTransitionOnChange
+    >
+      {children}
+    </ThemeProvider>
   );
 }

@@ -5,12 +5,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { ErrorMiddleware } from "./middleware/error";
 import userRouter from "./routes/user.route";
-import morgan from "morgan";
 import courseRouter from "./routes/course.route";
 import orderRouter from "./routes/order.route";
 import notificationRouter from "./routes/notification.route";
 import analyticsRouter from "./routes/analytics.routes";
 import layoutRouter from "./routes/layout.route";
+import { rateLimit } from "express-rate-limit";
 
 dotenv.config();
 
@@ -27,6 +27,13 @@ app.use(
 
 // cookie parser
 app.use(cookieParser());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+});
 
 // routes
 app.use(
@@ -54,4 +61,5 @@ app.all(/(.*)/, (req: Request, res: Response, next: NextFunction) => {
   next(err);
 });
 
+app.use(limiter)
 app.use(ErrorMiddleware);

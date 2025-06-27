@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { apiSlice } from "../api/apiSlice";
 import { userLoggedIn, userLoggedOut, userRegistration } from "./authSlice";
 

@@ -1,11 +1,15 @@
 'use client';
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import Header from './components/Header';
 import Heading from './utils/Heading';
 import Hero from './components/Route/Hero';
-interface Props { }
+import FAQ from './components/FAQ/FAQ';
+import Footer from './components/Footer';
+import Reviews
+  from './components/Route/Reviews';
+import Courses from './components/Route/Courses';
 
-const Page: FC<Props> = () => {
+const Page = () => {
   const [open, setOpen] = useState(false);
   const [activeItem, setActiveItem] = useState(0);
   const [route, setRoute] = useState("Login");
@@ -14,9 +18,9 @@ const Page: FC<Props> = () => {
   return (
     <div>
       <Heading
-        title="E-Learning Platform"
-        description="An e-learning platform where students can learn and receive guidance from teachers"
-        keywords="Programming, MERN Stack, AI, Machine Learning"
+        title="Elearning"
+        description="ELearning is the Platform for students to learn and get help from teachers"
+        keywords="Programming,Mern,Ai,Ml"
       />
       <Header open={open}
         setOpen={setOpen}
@@ -24,6 +28,10 @@ const Page: FC<Props> = () => {
         setRoute={setRoute}
         route={route} />
       <Hero />
+      <Courses />
+      <Reviews />
+      <FAQ />
+      <Footer />
     </div>
   );
 };

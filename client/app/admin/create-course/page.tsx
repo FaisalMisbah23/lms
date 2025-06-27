@@ -20,7 +20,7 @@ const page = () => {
                 </div>
                 <div className="w-[85%]">
                     <DashBoardHero />
-                    {/* <CreateCourse /> */}
+                    <CreateCourse />
                 </div>
             </div>
         </div>

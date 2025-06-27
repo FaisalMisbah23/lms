@@ -221,10 +221,7 @@ export const updateAccessToken = CatchAsyncError(
 
       await redis.set(user._id, JSON.stringify(user), "EX", 7 * 24 * 60 * 60);
 
-      res.status(200).json({
-        success: true,
-        accessToken,
-      });
+      next();
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
@@ -416,11 +413,21 @@ export const getAllUsers = CatchAsyncError(
   }
 );
 
+interface IUpdateUserRole {
+  userId: string;
+  role: string;
+}
+
 // update user role for admin
 export const updateUserRole = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { userId, role } = req.body;
+      const { userId, role } = req.body as IUpdateUserRole;
+      if (!isValidObjectId(userId)) {
+        return next(new ErrorHandler("Invalid user id!", 400));
+      }
+      if (!userId || !role)
+        return next(new ErrorHandler("Invalid user id or role!", 400));
       await updateUserRoleService(userId, role, res);
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
@@ -433,6 +440,7 @@ export const deleteUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { id } = req.params;
+      if (!id) return next(new ErrorHandler("User id is missing!", 400));
       const user = await User.findById(id);
 
       if (!user) {

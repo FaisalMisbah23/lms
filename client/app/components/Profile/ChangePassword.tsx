@@ -1,6 +1,6 @@
 import { styles } from "../../style/style";
 import { useUpdatePasswordMutation } from "../../../redux/features/user/userApi";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { toast } from "react-hot-toast";
 
 const ChangePassword: FC = () => {

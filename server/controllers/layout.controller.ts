@@ -14,19 +14,24 @@ export const createLayout = CatchAsyncError(
       }
 
       if (type === "Banner") {
-        const { image, title, subtitle } = req.body;
+        const { image, title, subTitle } = req.body;
+        if (!image || !title || !subTitle) {
+          return next(new ErrorHandler("All fields are required", 400));
+        }
+
         const myCloud = await cloudinary.v2.uploader.upload(image, {
           folder: "layout",
         });
+
         const banner = {
           image: {
             public_id: myCloud.public_id,
             url: myCloud.url,
           },
           title,
-          subtitle,
+          subTitle,
         };
-        await Layout.create(banner);
+        await Layout.create({ type: "Banner", banner });
       }
 
       if (type === "FAQ") {
@@ -68,10 +73,12 @@ export const editLayout = CatchAsyncError(
     try {
       const { type } = req.body;
       if (type === "Banner") {
-        const bannerData: any = await Layout.findOne({ type: "Banner  " });
-        const { image, title, subtitle } = req.body;
-        if (bannerData) {
-          await cloudinary.v2.uploader.destroy(bannerData.image.public_id);
+        const bannerData: any = await Layout.findOne({ type: "Banner" });
+        const { image, title, subTitle } = req.body;
+        if (bannerData && image.startsWith("data:")) {
+          await cloudinary.v2.uploader.destroy(
+            bannerData.banner.image.public_id
+          );
         }
         const myCloud = await cloudinary.v2.uploader.upload(image, {
           folder: "layout",
@@ -82,7 +89,7 @@ export const editLayout = CatchAsyncError(
             url: myCloud.url,
           },
           title,
-          subtitle,
+          subTitle,
         };
         await Layout.findByIdAndUpdate(bannerData._id, { banner });
       }
@@ -133,7 +140,12 @@ export const editLayout = CatchAsyncError(
 export const getLayoutByType = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const layout = await Layout.findOne({ type: req.body.type });
+      const { type } = req.params;
+      if (!type) {
+        return next(new ErrorHandler("Type is required", 400));
+      }
+
+      const layout = await Layout.findOne({ type });
       res.status(201).json({
         success: true,
         layout,

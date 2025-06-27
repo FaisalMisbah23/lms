@@ -5,7 +5,10 @@
         "Forgetpasswordotp",
         "NEXTAUTH",
         "prereq",
+        "prereqs",
         "socialimage",
+        "stripepublishable",
+        "stripepublishablekey",
         "VIDEOCIPHER"
     ]
 }

@@ -1,6 +1,7 @@
 import { Response } from "express";
 import User from "../models/user.model";
 import { redis } from "../utils/redis";
+import ErrorHandler from "../utils/ErrorHandler";
 
 // get user by id
 export const getUserById = async (id: string, res: Response) => {
@@ -30,7 +31,14 @@ export const updateUserRoleService = async (
   role: string,
   res: Response
 ) => {
-  const user = await User.findByIdAndUpdate(userId, { role }, { new: true });
+  const user = await User.findByIdAndUpdate(
+    userId,
+    {
+      role,
+    },
+    { new: true }
+  );
+
   if (user && user._id) {
     await redis.set(user._id.toString(), JSON.stringify(user));
   }
