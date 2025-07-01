@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { apiSlice } from "../api/apiSlice";
 import { userLoggedIn, userLoggedOut, userRegistration } from "./authSlice";
 
@@ -88,7 +87,7 @@ export const authApi = apiSlice.injectEndpoints({
       },
     }),
 
-    logOut: builder.mutation({
+    logOut: builder.query({
       query: () => ({
         url: "logout",
         method: "POST",
@@ -111,5 +110,5 @@ export const {
   useLoginMutation,
   useSocialAuthMutation,
   useRefreshTokenQuery,
-  useLogOutMutation,
+  useLogOutQuery,
 } = authApi;

@@ -2,7 +2,7 @@
 
 import { type FC, useEffect, useState } from "react"
 import SideBarProfile from "./SideBarProfile"
-import { useLogOutMutation } from "@/redux/features/auth/authApi"
+import { useLogOutQuery } from "@/redux/features/auth/authApi"
 import { signOut, useSession } from "next-auth/react"
 import ProfileInfo from "./ProfileInfo"
 import ChangePassword from "./ChangePassword"
@@ -18,16 +18,13 @@ const Profile: FC<Props> = ({ user }) => {
     const [logout, setLogOut] = useState(false)
     const [courses, setCourses] = useState<any>([]);
     const { data, isLoading } = useGetUserAllCoursesQuery(undefined, {});
-
-    const { data: session } = useSession()
-
-    const [logOut] = useLogOutMutation()
+    const { } = useLogOutQuery(undefined, {
+        skip: !logout ? true : false,
+    });
 
     const logOutHandler = async () => {
-        if (session) {
-            await signOut({ redirect: false })
-        }
-        logOut(undefined);
+        setLogOut(true);
+        await signOut();
     }
 
     if (typeof window !== "undefined") {

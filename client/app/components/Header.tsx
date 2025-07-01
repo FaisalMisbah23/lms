@@ -12,10 +12,11 @@ import Verification from "./Auth/Verification";
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import avatar from "../../public/assests/avatardefault.jpg";
-import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import Loader from "./Loader/Loader";
 
 
 interface HeaderProps {
@@ -36,38 +37,36 @@ const Header: FC<HeaderProps> = ({
   const [openSidebar, setOpenSidebar] = useState(false);
   const [logout, setLogout] = useState(false);
   const { user } = useSelector((state: any) => state.auth)
-  const { data: userData, isLoading, refetch } = useLoadUserQuery(undefined, {
-  })
-
+  const { data: userData, isLoading, refetch } = useLoadUserQuery(undefined, {})
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
+  const { } = useLogOutQuery(undefined, {
+    skip: !logout ? true : false,
+  })
 
 
   useEffect(() => {
-
-    if (!isLoading) {
-      if (!userData) {
-        if (data) {
-          socialAuth({
-            email: data?.user?.email as string,
-            name: data?.user?.name as string,
-            avatar: data.user?.image as string,
-          });
-          refetch();
+    const syncUser = async () => {
+      if (!isLoading && !userData && data?.user?.email) {
+        try {
+          await socialAuth({
+            email: data.user.email,
+            name: data.user.name,
+            avatar: data.user.image,
+          }).unwrap();
+          await refetch();
+          toast.success("Login successful");
+        } catch (err) {
+          console.error("Error during socialAuth:", err);
         }
       }
 
-      if (data === null) {
-        if (isSuccess) {
-          toast.success("login successfully!")
-        }
-      }
-
-      if (data === null && !isLoading && !userData) {
+      if (!data && !isLoading && !userData) {
         setLogout(true);
       }
+    };
 
-    }
+    syncUser();
   }, [data, userData, isLoading]);
 
   if (typeof window !== "undefined") {
@@ -86,6 +85,13 @@ const Header: FC<HeaderProps> = ({
       }
     }
   };
+
+  const { status, data: session } = useSession();
+
+  if (status === "loading" || isLoading) {
+    return <Loader />;
+  }
+
   return (
     <>
       <div className="w-full relative">
@@ -172,9 +178,6 @@ const Header: FC<HeaderProps> = ({
           )}
         </div>
 
-
-
-
         {route === "Login" && (
           <>
             {open && (
@@ -190,7 +193,6 @@ const Header: FC<HeaderProps> = ({
           </>
         )}
 
-
         {route === "Sign-Up" && (
           <>
             {open && (
@@ -205,14 +207,6 @@ const Header: FC<HeaderProps> = ({
             )}
           </>
         )}
-
-
-
-
-
-
-
-
 
         {route === "Verification" && (
           <>

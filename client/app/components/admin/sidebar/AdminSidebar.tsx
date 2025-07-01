@@ -25,8 +25,6 @@ import { useSelector } from "react-redux";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { useLogOutMutation } from "@/redux/features/auth/authApi";
-import { signOut } from "next-auth/react";
 
 interface itemProps {
   title: string;
@@ -55,8 +53,7 @@ const Sidebar = () => {
   const [selected, setSelected] = useState("Dashboard");
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
-
-  const [logOut] = useLogOutMutation();
+    const [logout, setLogout] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -64,9 +61,8 @@ const Sidebar = () => {
     return null;
   }
 
-  const logoutHandler = async () => {
-    await signOut({ redirect: false })
-    logOut(undefined);
+  const logoutHandler = () => {
+    setLogout(true);
   };
 
   return (
