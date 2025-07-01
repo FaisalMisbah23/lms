@@ -37,8 +37,8 @@ const Header: FC<HeaderProps> = ({
   const [logout, setLogout] = useState(false);
   const { user } = useSelector((state: any) => state.auth)
   const { data: userData, isLoading, refetch } = useLoadUserQuery(undefined, {
-    skip: !logout ? true : false,
   })
+
   const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
 
