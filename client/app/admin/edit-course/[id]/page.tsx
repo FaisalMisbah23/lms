@@ -10,15 +10,14 @@ interface Params {
     id: string;
 }
 
-const Page: React.FC = () => {
-    const params = useParams<Params>();
-    const id = params?.id as string;
+const Page = ({ params }: any) => {
+    const id = params.id;
 
     return (
 
         <div>
             <Heading
-                title="Create-Course-Admin"
+                title="Edit-Course-Admin"
                 description="Elearning is a platform for students to learn and get help from teachers"
                 keywords="Programming, MERN, REDUX, Machine Learning"
             />

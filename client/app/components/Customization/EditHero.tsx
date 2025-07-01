@@ -8,7 +8,7 @@ import { toast } from "react-hot-toast"
 import { AiOutlineCamera } from "react-icons/ai"
 import Image from "next/image"
 
-const EditHero: FC<Props> = () => {
+const EditHero = () => {
     const [image, setImage] = useState("")
     const [title, setTitle] = useState("")
     const [subTitle, setSubTitle] = useState("")

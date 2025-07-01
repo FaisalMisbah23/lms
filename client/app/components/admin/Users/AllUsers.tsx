@@ -74,7 +74,7 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
     }, [updateError, isSuccess, updateData, deleteSuccess, deleteError, refetch])
 
     const handleSubmit = async () => {
-        const userToUpdate = data?.users.find((user) => user.email === email)
+        const userToUpdate = data?.users.find((user:any) => user.email === email)
         if (userToUpdate) {
             await updateUserRole({ userId: userToUpdate._id, role })
         } else {
@@ -164,7 +164,12 @@ const AllUsers: FC<Props> = ({ isTeam }) => {
                                             <input
                                                 type="checkbox"
                                                 checked={value}
-                                                onChange={() => setVisibleColumns(prev => ({ ...prev, [key]: !prev[key] }))}
+                                                onChange={() =>
+                                                    setVisibleColumns(prev => ({
+                                                        ...prev,
+                                                        [key as keyof typeof prev]: !prev[key as keyof typeof prev]
+                                                    }))
+                                                }
                                             />
                                             <span className="text-gray-700 dark:text-gray-300">{key}</span>
                                         </label>

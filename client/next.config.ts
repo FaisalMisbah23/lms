@@ -3,13 +3,10 @@ const nextConfig = {
   images: {
     domains: ["res.cloudinary.com", "randomuser.me"],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
+  experimental: {
+    reactRoot: true,
+    suppressHydrationWarning: true,
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  output: "standalone",
 };
 
-export default nextConfig;
+module.exports = nextConfig;

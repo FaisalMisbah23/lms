@@ -1,5 +1,5 @@
 "use client";
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { ProSidebar, Menu, MenuItem } from "react-pro-sidebar";
 import { Box, IconButton, Typography } from "@mui/material";
 import "react-pro-sidebar/dist/css/styles.css";
@@ -31,7 +31,7 @@ import { signOut } from "next-auth/react";
 interface itemProps {
   title: string;
   to: string;
-  icon: JSX.Element;
+  icon: React.ReactElement;
   selected: string;
   setSelected: any;
 }
