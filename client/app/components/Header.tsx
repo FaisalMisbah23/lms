@@ -8,7 +8,6 @@ import CustomModal from "../utils/CustomModal";
 import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
 import Verification from "./Auth/Verification";
-
 import { useSelector } from "react-redux";
 import Image from "next/image";
 import avatar from "../../public/assests/avatardefault.jpg";
@@ -16,7 +15,6 @@ import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/aut
 import { useSession } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
-import Loader from "./Loader/Loader";
 
 
 interface HeaderProps {
@@ -39,7 +37,7 @@ const Header: FC<HeaderProps> = ({
   const { user } = useSelector((state: any) => state.auth)
   const { data: userData, isLoading, refetch } = useLoadUserQuery(undefined, {})
   const { data } = useSession();
-  const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
+  const [socialAuth] = useSocialAuthMutation();
   const { } = useLogOutQuery(undefined, {
     skip: !logout ? true : false,
   })
@@ -87,10 +85,6 @@ const Header: FC<HeaderProps> = ({
   };
 
   const { status, data: session } = useSession();
-
-  if (status === "loading" || isLoading) {
-    return <Loader />;
-  }
 
   return (
     <>

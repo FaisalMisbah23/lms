@@ -5,7 +5,7 @@ import Heading from "../../utils/Heading";
 import CourseAnalytics from "../../components/admin/Analytics/CourseAnalytics";
 import DashBoardHero from "@/app/components/admin/DashBoardHero";
 
-const page = () => {
+const Page = () => {
     return (
         <div>
             <Heading
@@ -26,4 +26,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;

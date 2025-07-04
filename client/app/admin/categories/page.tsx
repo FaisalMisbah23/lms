@@ -7,7 +7,7 @@ import AdminProtected from "@/app/hooks/adminProtected";
 import EditCategories from "../../components/Customization/EditCategories";
 import DashBoardHero from "@/app/components/admin/DashBoardHero";
 
-const page = () => {
+const Page = () => {
     return (
         <div>
             <AdminProtected>
@@ -30,4 +30,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;

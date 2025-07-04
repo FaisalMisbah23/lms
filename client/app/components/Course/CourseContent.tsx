@@ -37,7 +37,7 @@ const CourseContent = ({ id, user }: Props) => {
                     <div className="w-full grid 800px:grid-cols-10">
                         <Heading
                             title={data[activeVideo]?.title}
-                            description="ANything"
+                            description="Elearning is a platform for students to learn and get help from teachers"
                             keywords={data[activeVideo]?.tags}
                         />
                         <div className="col-span-7">

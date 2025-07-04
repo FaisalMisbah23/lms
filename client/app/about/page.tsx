@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Header from "../components/Header";
-import Headings from "../utils/Heading";
+import Heading from "../utils/Heading";
 import About from "./About";
 import Footer from "../components/Footer";
 
@@ -13,10 +13,10 @@ const Page = () => {
 
   return (
     <div>
-      <Headings
-        title="About us - ELearning"
-        description="ELearning is a learning management system for helping programmers"
-        keywords="programming,MERN"
+      <Heading
+        title="About | Elearning"
+        description="Elearning is a platform for students to learn and get help from teachers"
+        keywords="Programming, MERN, Redux, Machine Learning"
       />
       <Header
         open={open}

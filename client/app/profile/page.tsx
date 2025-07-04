@@ -15,9 +15,9 @@ const Page = () => {
     <div>
       <Protected>
         <Heading
-          title={`${user.name} Profile`}
-          description="An e-learning platform where students can learn and receive guidance from teachers"
-          keywords="Programming, MERN Stack, AI, Machine Learning"
+          title="Profile | Elearning"
+          description="Elearning is a platform for students to learn and get help from teachers"
+          keywords="Programming, MERN, Redux, Machine Learning"
         />
         <Header open={open}
           setOpen={setOpen}

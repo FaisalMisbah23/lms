@@ -67,11 +67,9 @@ const Page = () => {
                     />
                     <div className="w-[95%] 800px:w-[85%] m-auto min-h-[100vh]">
                         <Heading
-                            title={"All courses - Elearning"}
-                            description={"Elearning is a programming community."}
-                            keywords={
-                                "programming community, coding skills, expert insights, collaboration, growth"
-                            }
+                            title="All Courses | Elearning"
+                            description="Elearning is a platform for students to learn and get help from teachers"
+                            keywords="Programming, MERN, Redux, Machine Learning"
                         />
                         <br />
                         <div className="w-full flex items-center flex-wrap">

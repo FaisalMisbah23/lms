@@ -5,14 +5,14 @@ import Heading from "../utils/Heading";
 import AdminSidebar from "../components/admin/sidebar/AdminSidebar";
 import DashBoardHero from "../components/admin/DashBoardHero";
 
-const page = () => {
+const Page = () => {
     return (
         <div>
             <AdminProtected>
                 <Heading
-                    title={`Elearning-Admin`}
+                    title="Dashboard - Admin | Elearning"
                     description="Elearning is a platform for students to learn and get help from teachers"
-                    keywords="Programming , MERN ,REDUX , Machine Learning"
+                    keywords="Programming, MERN, Redux, Machine Learning"
                 />
                 <div className="flex h-full">
                     {" "}
@@ -29,4 +29,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;

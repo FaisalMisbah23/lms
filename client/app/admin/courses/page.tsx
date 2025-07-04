@@ -5,7 +5,7 @@ import AdminSidebar from "@/app/components/admin/sidebar/AdminSidebar";
 import Heading from "@/app/utils/Heading";
 import React from "react";
 
-const page = () => {
+const Page = () => {
     return (
         <div>
             <Heading
@@ -28,4 +28,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;

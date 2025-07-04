@@ -18,9 +18,9 @@ const Page = () => {
   return (
     <div>
       <Heading
-        title="Elearning"
-        description="ELearning is the Platform for students to learn and get help from teachers"
-        keywords="Programming,Mern,Ai,Ml"
+        title="Home | Elearning"
+        description="Elearning is a platform for students to learn and get help from teachers"
+        keywords="Programming, MERN, Redux, Machine Learning"
       />
       <Header open={open}
         setOpen={setOpen}

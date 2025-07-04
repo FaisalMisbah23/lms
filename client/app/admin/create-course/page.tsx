@@ -5,13 +5,13 @@ import AdminSidebar from "@/app/components/admin/sidebar/AdminSidebar";
 import Heading from "@/app/utils/Heading";
 import React from "react";
 
-const page = () => {
+const Page = () => {
     return (
         <div>
             <Heading
-                title={`Create-Course-Admin`}
+                title="Create Course - Admin | Elearning"
                 description="Elearning is a platform for students to learn and get help from teachers"
-                keywords="Programming , MERN ,REDUX , Machine Learning"
+                keywords="Programming, MERN, Redux, Machine Learning"
             />
             <div className="flex h-full">
                 {" "}
@@ -27,4 +27,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;

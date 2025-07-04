@@ -5,13 +5,13 @@ import Heading from "../../utils/Heading";
 import UserAnalytics from "../../components/admin/Analytics/UserAnalytics";
 import DashBoardHero from "@/app/components/admin/DashBoardHero";
 
-const page = () => {
+const Page = () => {
     return (
         <div>
             <Heading
-                title="Elearning - Admin"
-                description="ELearning is a platform for students to learn and get help from teachers"
-                keywords="Programming,MERN,Redux,Machine Learning"
+                title="User Analytics - Admin | Elearning"
+                description="Elearning is a platform for students to learn and get help from teachers"
+                keywords="Programming, MERN, Redux, Machine Learning"
             />
             <div className="flex">
                 <div className="1500px:w-[19%] w-1/5">
@@ -26,4 +26,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;

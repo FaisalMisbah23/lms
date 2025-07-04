@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
-import { useTheme } from "next-themes";
 import { useGetAllCoursesQuery } from "@/redux/features/courses/coursesApi";
-import Loader from "../../Loader/Loader";
-import { format } from "timeago.js";
-import { useGetAllOrdersQuery } from "@/redux/features/orders/ordersApi";
 import { useGetAllUsersQuery } from "@/redux/features/user/userApi";
+import { Box } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 import { AiOutlineMail } from "react-icons/ai";
+import { format } from "timeago.js";
+import Loader from "../../Loader/Loader";
+import { useGetAllOrdersQuery } from "@/redux/features/orders/ordersApi";
 
 type Props = {
     isDashboard?: boolean;
@@ -23,7 +23,7 @@ const AllInvoices = ({ isDashboard }: Props) => {
 
     useEffect(() => {
         if (data) {
-            const temp = data.users?.map((item: any) => {
+            const temp = data.orders.map((item: any) => {
                 const user = usersData?.users.find(
                     (user: any) => user._id === item.userId
                 );
@@ -35,10 +35,9 @@ const AllInvoices = ({ isDashboard }: Props) => {
                     userName: user?.name,
                     userEmail: user?.email,
                     title: course?.name,
-                    price: "₹" + course?.price,
+                    price: "$" + course?.price,
                 };
             });
-
             setOrderData(temp);
         }
     }, [data, usersData, coursesData]);
@@ -96,7 +95,7 @@ const AllInvoices = ({ isDashboard }: Props) => {
                 <Box m={isDashboard ? "0" : "40px"}>
                     <Box
                         m={isDashboard ? "0" : "40px 0 0 0"}
-                        height={isDashboard ? "35vh" : "90vh"}
+                        height={isDashboard ? "35vh" : "82.49vh"}
                         overflow={"hidden"}
                         sx={{
                             "& .MuiDataGrid-root": {

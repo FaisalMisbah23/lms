@@ -9,8 +9,6 @@ import { useGetAllNotificationsQuery, useUpdateNotificationStatusMutation } from
 const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || ""
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] })
 
-// Static notifications data
-
 type Props = {
     open?: boolean
     setOpen?: (open: boolean) => void
@@ -59,6 +57,7 @@ const DashboardHeader: FC<Props> = () => {
     }, [])
 
     const handleNotificationStatusChange = async (id: string) => {
+        console.log("🚀 ~ handleNotificationStatusChange ~ id:", id)
         await updateNotificationStatus(id);
     }
 
@@ -87,7 +86,7 @@ const DashboardHeader: FC<Props> = () => {
                             <div className="w-full flex items-center justify-between p-2">
                                 <p className="text-black dark:text-white">{item.title}</p>
                                 <p className="text-black dark:text-white cursor-pointer opacity-50"
-                                    onChange={() => handleNotificationStatusChange(item._id)}>
+                                    onClick={() => handleNotificationStatusChange(item._id)}>
                                     Mark as read
                                 </p>
                             </div>

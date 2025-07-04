@@ -8,14 +8,14 @@ import EditFaq from "../../components/Customization/EditFaq";
 import DashBoardHero from "@/app/components/admin/DashBoardHero";
 
 
-const page = () => {
+const Page = () => {
     return (
         <div>
             <AdminProtected>
                 <Heading
-                    title="Elearning - Admin"
-                    description="ELearning is a platform for students to learn and get help from teachers"
-                    keywords="Programming,MERN,Redux,Machine Learning"
+                    title="FAQ - Admin | Elearning"
+                    description="Elearning is a platform for students to learn and get help from teachers"
+                    keywords="Programming, MERN, Redux, Machine Learning"
                 />
                 <div className="flex min-h-screen">
                     <div className="1500px:w-[16%] w-1/5">
@@ -32,4 +32,4 @@ const page = () => {
     );
 };
 
-export default page;
+export default Page;
