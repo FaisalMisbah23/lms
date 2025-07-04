@@ -2,7 +2,7 @@
 import CourseDetailsPage from "../../components/Course/CourseDetailsPage";
 import React from "react";
 import { useParams } from "next/navigation";
-import Heading from "../../components/Heading";
+import Heading from "@/app/utils/Heading";
 
 const Page = () => {
     const params = useParams();
