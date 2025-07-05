@@ -42,7 +42,7 @@ const CourseDetails = ({
     const discountPercentagePrice = discountPercentage.toFixed(0);
 
     const isPurchased =
-        user && user?.courses?.find((item: any) => item._id === data._id);
+        user && user?.courses?.find((item: any) => item.courseId === data._id);
 
     const handleOrder = (e: any) => {
         if (user) {
@@ -52,6 +52,8 @@ const CourseDetails = ({
             openAuthModal(true);
         }
     };
+
+    console.log("🚀 ~ data?.demoUrl:", data?.demoUrl)
 
     return (
         <div>
