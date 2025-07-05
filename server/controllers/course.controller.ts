@@ -67,13 +67,13 @@ export const editCourse = CatchAsyncError(
             await cloudinary.v2.uploader.destroy(thumb.public_id);
           }
 
-          // 🔹 Upload new thumbnail
+          // Upload new thumbnail
           const uploadedImage = await cloudinary.v2.uploader.upload(
             data.thumbnail.url,
             { folder: "courses" }
           );
 
-          // 🔹 Update thumbnail data
+          // Update thumbnail data
           data.thumbnail = {
             public_id: uploadedImage.public_id,
             url: uploadedImage.secure_url,
@@ -90,6 +90,13 @@ export const editCourse = CatchAsyncError(
         { new: true }
       );
 
+      await redis.set(
+        courseId,
+        JSON.stringify(updatedCourse),
+        "EX",
+        7 * 24 * 60 * 60
+      );
+
       //  Return Response
       res.status(200).json({
         success: true,
@@ -97,7 +104,6 @@ export const editCourse = CatchAsyncError(
         course: updatedCourse,
       });
     } catch (error: any) {
-      console.error("Error updating course:", error.message);
       return next(new ErrorHandler(error.message, 500));
     }
   }
@@ -509,8 +515,10 @@ export const generateVideoUrl = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { videoId } = req.body;
+      const apiSecret = videoId.split("/")[0];
+      const id = videoId.split("/")[1];
       const response = await axios.post(
-        `https://dev.vdocipher.com/api/videos/${videoId}/otp`,
+        `https://dev.vdocipher.com/api/videos/${id}/otp`,
         {
           ttl: 300,
         },
@@ -518,7 +526,7 @@ export const generateVideoUrl = CatchAsyncError(
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Apisecret ${process.env.VIDEOCIPHER_API_SECRET}`,
+            Authorization: `Apisecret ${apiSecret}`,
           },
         }
       );

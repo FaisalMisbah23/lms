@@ -6,11 +6,9 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { IoCheckmarkDoneOutline, IoCloseOutline } from "react-icons/io5";
 import { format } from "timeago.js";
-
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import Image from "next/image";
 import { Elements } from "@stripe/react-stripe-js";
-
 import { VscVerifiedFilled } from "react-icons/vsc";
 import CourseContentList from "./CourseContentList";
 import CheckOutForm from "../Payment/CheckOutForm";

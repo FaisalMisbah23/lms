@@ -40,7 +40,7 @@ const Profile: FC<Props> = ({ user }) => {
     useEffect(() => {
         if (data) {
             const filteredCourses = user.courses
-                .map((userCourse: any) => data.courses.find((course: any) => userCourse._id === course._id))
+                .map((userCourse: any) => data.courses.find((course: any) => userCourse.courseId === course._id))
                 .filter((course: any) => course !== undefined);
             setCourses(filteredCourses);
         }

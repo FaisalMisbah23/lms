@@ -8,8 +8,6 @@ import {
 import { useGetCourseDetailsQuery } from "@/redux/features/courses/coursesApi";
 import Image from "next/image";
 import { format } from "timeago.js";
-
-
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import {
@@ -262,7 +260,6 @@ const CourseContentMedia = ({
                                 className="inline-block text-[#4395c4] 800px:text-[20px] 800px:pl-2"
                                 href={item.url}
                             >
-
                                 {item.url}
                             </a>
                         </div>

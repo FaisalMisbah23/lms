@@ -57,7 +57,6 @@ const DashboardHeader: FC<Props> = () => {
     }, [])
 
     const handleNotificationStatusChange = async (id: string) => {
-        console.log("🚀 ~ handleNotificationStatusChange ~ id:", id)
         await updateNotificationStatus(id);
     }
 
