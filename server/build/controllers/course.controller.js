@@ -67,9 +67,9 @@ exports.editCourse = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) =>
                 if (thumb && thumb.public_id) {
                     yield cloudinary_1.default.v2.uploader.destroy(thumb.public_id);
                 }
-                // 🔹 Upload new thumbnail
+                // Upload new thumbnail
                 const uploadedImage = yield cloudinary_1.default.v2.uploader.upload(data.thumbnail.url, { folder: "courses" });
-                // 🔹 Update thumbnail data
+                // Update thumbnail data
                 data.thumbnail = {
                     public_id: uploadedImage.public_id,
                     url: uploadedImage.secure_url,
@@ -81,6 +81,7 @@ exports.editCourse = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) =>
         }
         // Update Course Data
         const updatedCourse = yield course_model_1.default.findByIdAndUpdate(courseId, { $set: data }, { new: true });
+        yield redis_1.redis.set(courseId, JSON.stringify(updatedCourse), "EX", 7 * 24 * 60 * 60);
         //  Return Response
         res.status(200).json({
             success: true,
@@ -89,7 +90,6 @@ exports.editCourse = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) =>
         });
     }
     catch (error) {
-        console.error("Error updating course:", error.message);
         return next(new ErrorHandler_1.default(error.message, 500));
     }
 }));
@@ -373,13 +373,15 @@ exports.deleteCourse = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) 
 exports.generateVideoUrl = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { videoId } = req.body;
-        const response = yield axios_1.default.post(`https://dev.vdocipher.com/api/videos/${videoId}/otp`, {
+        const apiSecret = videoId.split("/")[0];
+        const id = videoId.split("/")[1];
+        const response = yield axios_1.default.post(`https://dev.vdocipher.com/api/videos/${id}/otp`, {
             ttl: 300,
         }, {
             headers: {
                 Accept: "application/json",
                 "Content-Type": "application/json",
-                Authorization: `Apisecret ${process.env.VIDEOCIPHER_API_SECRET}`,
+                Authorization: `Apisecret ${apiSecret}`,
             },
         });
         res.json(response.data);

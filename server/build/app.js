@@ -22,7 +22,7 @@ dotenv_1.default.config();
 exports.app.use(express_1.default.json({ limit: "50mb" }));
 // cors
 exports.app.use((0, cors_1.default)({
-    origin: process.env.Origin || "http://localhost:3000",
+    origin: process.env.ORIGIN || "http://localhost:3000",
     credentials: true,
 }));
 // cookie parser

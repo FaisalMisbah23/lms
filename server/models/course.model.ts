@@ -24,7 +24,7 @@ interface ICourseData extends Document {
   title: string;
   description: string;
   videoUrl: string;
-  courseSection: string;
+  videoSection: string;
   videoLength: number;
   videoPlayer: string;
   links: ILink[];
@@ -81,7 +81,7 @@ const courseDataSchema = new Schema<ICourseData>({
   title: String,
   description: String,
   videoUrl: String,
-  courseSection: String,
+  videoSection: String,
   videoLength: Number,
   videoPlayer: String,
   links: [linkSchema],

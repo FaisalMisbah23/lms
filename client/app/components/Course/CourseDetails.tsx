@@ -53,8 +53,6 @@ const CourseDetails = ({
         }
     };
 
-    console.log("🚀 ~ data?.demoUrl:", data?.demoUrl)
-
     return (
         <div>
             <div className="w-[90%] 800px:w-[90%] m-auto py-5">

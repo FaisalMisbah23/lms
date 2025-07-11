@@ -56,7 +56,7 @@ const courseDataSchema = new mongoose_1.Schema({
     title: String,
     description: String,
     videoUrl: String,
-    courseSection: String,
+    videoSection: String,
     videoLength: Number,
     videoPlayer: String,
     links: [linkSchema],

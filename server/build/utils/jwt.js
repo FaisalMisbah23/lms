@@ -23,13 +23,15 @@ exports.accessTokenOptions = {
     expires: new Date(Date.now() + exports.accessTokenExpires * 60 * 1000),
     maxAge: exports.accessTokenExpires * 60 * 1000,
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
+    secure: true,
 };
 exports.refreshTokenOptions = {
     expires: new Date(Date.now() + exports.refreshTokenExpires * 24 * 60 * 1000),
     maxAge: exports.refreshTokenExpires * 24 * 60 * 1000,
     httpOnly: true,
-    sameSite: "lax",
+    sameSite: "none",
+    secure: true,
 };
 const sendToken = (user, statusCode, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -37,10 +39,6 @@ const sendToken = (user, statusCode, res) => __awaiter(void 0, void 0, void 0, f
         const refreshToken = user.signRefreshToken();
         // update session to redis
         yield redis_1.redis.set(user._id, JSON.stringify(user));
-        // only set secure to true in production
-        if (process.env.NODE_ENV === "PRODUCTION") {
-            exports.accessTokenOptions.secure = true;
-        }
         res.cookie("access_token", accessToken, exports.accessTokenOptions);
         res.cookie("refresh_token", refreshToken, exports.refreshTokenOptions);
         res.status(statusCode).json({
