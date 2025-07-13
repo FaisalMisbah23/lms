@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { useParams } from "next/navigation";
 import DashBoardHero from "@/app/components/admin/DashBoardHero";
 import AdminSidebar from "@/app/components/admin/sidebar/AdminSidebar";
 import Heading from "@/app/utils/Heading";

@@ -45,6 +45,7 @@ const EditCourse: FC<Props> = ({ id }) => {
             videoUrl: "",
             title: "",
             description: "",
+            videoLength: "",
             videoSection: "Untitled Section",
             links: [
                 {
@@ -141,7 +142,6 @@ const EditCourse: FC<Props> = ({ id }) => {
 
             setIsPageLoading(false)
         } catch (err) {
-            console.error("Error setting up course data:", err)
             toast.error("Error loading course data")
             setIsPageLoading(false)
         }
@@ -176,6 +176,7 @@ const EditCourse: FC<Props> = ({ id }) => {
                 videoUrl: courseContent.videoUrl || "",
                 title: courseContent.title || "",
                 description: courseContent.description || "",
+                videoLength: courseContent.videoLength || "",
                 videoSection: courseContent.videoSection || "Untitled Section",
                 links: Array.isArray(courseContent.links)
                     ? courseContent.links.map((link) => ({
@@ -184,13 +185,13 @@ const EditCourse: FC<Props> = ({ id }) => {
                     }))
                     : [],
                 suggestion: courseContent.suggestion || "",
+
             }))
 
             // Prepare our data object - use prerequisites to match backend
             const data = {
                 name: courseInfo.name,
                 description: courseInfo.description,
-
                 category: courseInfo.category,
                 price: courseInfo.price,
                 estimatedPrice: courseInfo.estimatedPrice,
@@ -204,13 +205,12 @@ const EditCourse: FC<Props> = ({ id }) => {
                 totalVideos: courseContentData.length,
                 benefits: formattedBenefits,
                 prerequisites: formattedPrerequisites, // Use prerequisites to match backend
-                courseContent: formattedCourseContentData,
+                courseData: formattedCourseContentData,
             }
 
             setCourseData(data)
             return true
         } catch (err) {
-            console.error("Error preparing course data:", err)
             toast.error("Error preparing course data")
             return false
         }
@@ -241,7 +241,6 @@ const EditCourse: FC<Props> = ({ id }) => {
             })
 
         } catch (err) {
-            console.error("Error updating course:", err)
             toast.error("Failed to update course")
         }
     }

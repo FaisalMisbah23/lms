@@ -13,13 +13,17 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
   });
 
   useEffect(() => {
-    axios
-      .post(`${process.env.NEXT_PUBLIC_SOCKET_SERVER_URI}api/v1/getVdoCipherOTP`, {
-        videoId: videoUrl,
-      })
-      .then((res) => {
-        setVideoData(res.data);
-      });
+    try {
+      axios
+        .post(`${process.env.NEXT_PUBLIC_SOCKET_SERVER_URI}api/v1/getVdoCipherOTP`, {
+          videoId: videoUrl,
+        })
+        .then((res) => {
+          setVideoData(res.data);
+        });
+    } catch (error) {
+      
+    }
   }, [videoUrl]);
 
   return (
