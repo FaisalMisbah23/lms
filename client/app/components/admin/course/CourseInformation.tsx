@@ -226,12 +226,13 @@ const CourseInformation: FC<Props> = ({ courseInfo, setCourseInfo, active, setAc
                     </label>
                 </div>
                 <br />
-                <div className="w-full flex items-center justify-end">
-                    <input
+                <div className="flex justify-end">
+                    <button
                         type="submit"
-                        value="Next"
-                        className="w-full 800px:w-[180px] h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 cursor-pointer"
-                    />
+                        className="w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    >
+                        Next
+                    </button>
                 </div>
                 <br />
                 <br />

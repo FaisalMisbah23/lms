@@ -1,5 +1,4 @@
 
-import { styles } from "@/app/style/style";
 import CoursePlayer from "@/app/utils/CoursePlayer";
 import Ratings from "@/app/utils/Ratings";
 import Link from "next/link";
@@ -12,6 +11,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { VscVerifiedFilled } from "react-icons/vsc";
 import CourseContentList from "./CourseContentList";
 import CheckOutForm from "../Payment/CheckOutForm";
+import { FiPlay, FiClock, FiUsers, FiStar, FiCheckCircle, FiBookOpen, FiAward, FiShield } from "react-icons/fi";
 
 type Props = {
     data: any;
@@ -54,157 +54,229 @@ const CourseDetails = ({
     };
 
     return (
-        <div>
-            <div className="w-[90%] 800px:w-[90%] m-auto py-5">
-                <div className="w-full flex flex-col-reverse 800px:flex-row">
-                    <div className="w-full 800px:w-[65%] 800px:pr-5">
-                        <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
+        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {/* Course Header */}
+                <div className="mb-8">
+                    <div className="flex items-center space-x-2 mb-4">
+                        <div className="inline-flex items-center space-x-2 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                            <FiBookOpen className="w-4 h-4" />
+                            <span>{data.category}</span>
+                        </div>
+                        <div className="inline-flex items-center space-x-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-full text-sm font-medium">
+                            <FiAward className="w-4 h-4" />
+                            <span>{data.level}</span>
+                        </div>
+                    </div>
+                    
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
                             {data.name}
                         </h1>
-                        <div className="flex items-center justify-between pt-3">
-                            <div className="flex items-center">
-                                <Ratings rating={data.ratings} />
-                                <h5 className="text-black dark:text-white">
-                                    {data.reviews?.length} Reviews
-                                </h5>
+                    
+                    <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-6 max-w-4xl">
+                        {data.description}
+                    </p>
+
+                    {/* Course Stats */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <div className="flex items-center space-x-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
+                                <FiStar className="w-5 h-5 text-primary" />
                             </div>
-                            <h5 className="text-black dark:text-white">
-                                {data.purchased} Students
-                            </h5>
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    {typeof data?.ratings === "number" ? data.ratings.toFixed(1) : "0.0"}
+                                </p>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">Rating</p>
+                            </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
+                                <FiUsers className="w-5 h-5 text-primary" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    {data.purchased}
+                                </p>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">Students</p>
+                            </div>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
+                                <FiPlay className="w-5 h-5 text-primary" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    {data.totalVideos}
+                                </p>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">Lessons</p>
+                            </div>
                         </div>
 
-                        <br />
-                        <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
+                        <div className="flex items-center space-x-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                            <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
+                                <FiClock className="w-5 h-5 text-primary" />
+                            </div>
+                            <div>
+                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                    {data.reviews?.length || 0}
+                                </p>
+                                <p className="text-sm text-gray-600 dark:text-gray-300">Reviews</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    {/* Main Content */}
+                    <div className="lg:col-span-2 space-y-8">
+                        {/* What You'll Learn */}
+                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                             What you will learn from this course?
-                        </h1>
-                        <div>
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             {data.benefits?.map((item: any, index: number) => (
-                                <div
-                                    className="w-full flex 800px:items-center py-2"
-                                    key={index}
-                                >
-                                    <div className="w-[15px] mr-1">
+                                    <div key={index} className="flex items-start space-x-3">
+                                        <div className="flex-shrink-0 mt-1">
                                         <IoCheckmarkDoneOutline
                                             size={20}
-                                            className="text-black dark:text-white"
+                                                className="text-green-500"
                                         />
                                     </div>
-                                    <p className="pl-2 text-black dark:text-white">
+                                        <p className="text-gray-700 dark:text-gray-300">
                                         {item.title}
                                     </p>
                                 </div>
                             ))}
-                            <br />
-                            <br />
+                            </div>
                         </div>
-                        <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
+
+                        {/* Prerequisites */}
+                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                             What are the prerequisites for starting this course?
-                        </h1>
+                            </h2>
+                            <div className="space-y-4">
                         {data.prerequisites?.map((item: any, index: number) => (
-                            <div className="w-full flex 800px:items-center py-2" key={index}>
-                                <div className="w-[15px] mr-1">
+                                    <div key={index} className="flex items-start space-x-3">
+                                        <div className="flex-shrink-0 mt-1">
                                     <IoCheckmarkDoneOutline
                                         size={20}
-                                        className="text-black dark:text-white"
+                                                className="text-green-500"
                                     />
                                 </div>
-                                <p className="pl-2 text-black dark:text-white">{item.title}</p>
+                                        <p className="text-gray-700 dark:text-gray-300">
+                                            {item.title}
+                                        </p>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                        <br />
-                        <br />
-                        <div>
-                            <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
+                        </div>
+
+                        {/* Course Overview */}
+                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                                 Course Overview
-                            </h1>
+                            </h2>
                             <CourseContentList isDemo={true} data={data?.courseData} />
                         </div>
-                        <br />
-                        <br />
-                        {/* course description */}
-                        <div className="w-full">
-                            <h1 className="text-[25px] font-Poppins font-[600] text-black dark:text-white">
+
+                        {/* Course Details */}
+                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                                 Course Details
-                            </h1>
-                            <p className="text-[18px] mt-[20px] whitespace-pre-line w-full overflow-hidden text-black dark:text-white">
+                            </h2>
+                            <div className="prose prose-gray dark:prose-invert max-w-none">
+                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
                                 {data.description}
                             </p>
-                        </div>
-                        <br />
-                        <br />
-                        <div className="w-full">
-                            <div className="800px:flex items-center">
-                                <Ratings rating={data?.ratings} />
-                                <div className="mb-2 800px:mb-[unset]" />
-                                <h5 className="text-[25px] font-Poppins text-black dark:text-white">
-                                    {typeof data?.ratings === "number" ? data.ratings.toFixed(1) : "0.0"} Course Rating • {data?.reviews?.length || 0} Reviews
-                                </h5>
-
-
                             </div>
-                            <br />
+                        </div>
+
+                        {/* Reviews Section */}
+                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center space-x-4">
+                                <Ratings rating={data?.ratings} />
+                                    <div>
+                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                            {typeof data?.ratings === "number" ? data.ratings.toFixed(1) : "0.0"} Course Rating
+                                        </h2>
+                                        <p className="text-gray-600 dark:text-gray-300">
+                                            {data?.reviews?.length || 0} Reviews
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-6">
                             {(data?.reviews && [...data.reviews].reverse()).map(
                                 (item: any, index: number) => (
-                                    <div className="w-full pb-4" key={index}>
-                                        <div className="flex">
-                                            <div className="w-[50px] h-[50px]">
+                                        <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0">
+                                            <div className="flex items-start space-x-4">
+                                                <div className="flex-shrink-0">
                                                 <Image
                                                     src={
                                                         item.user.avatar
                                                             ? item.user.avatar.url
                                                             : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
                                                     }
-                                                    width={50}
-                                                    height={50}
+                                                        width={48}
+                                                        height={48}
                                                     alt=""
-                                                    className="w-[50px] h-[50px] rounded-full object-cover"
+                                                        className="w-12 h-12 rounded-full object-cover"
                                                 />
                                             </div>
-                                            <div className="hidden 800px:block pl-2">
-                                                <div className="flex items-center">
-                                                    <h5 className="text-[18px] pr-2 text-black dark:text-white">
+                                                <div className="flex-1">
+                                                    <div className="flex items-center space-x-2 mb-2">
+                                                        <h5 className="font-semibold text-gray-900 dark:text-white">
                                                         {item.user.name}
                                                     </h5>
                                                     <Ratings rating={item.rating} />
                                                 </div>
-                                                <p className="text-black dark:text-white">
+                                                    <p className="text-gray-700 dark:text-gray-300 mb-2">
                                                     {item.comment}
                                                 </p>
-                                                <small className="text-[#000000d1] dark:text-[#ffffff83]">
-                                                    {format(item.createdAt)} •
-                                                </small>
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                        {format(item.createdAt)}
+                                                    </p>
                                             </div>
-                                            <div className="pl-2 flex 800px:hidden items-center">
-                                                <h5 className="text-[18px] pr-2 text-black dark:text-white">
-                                                    {item.user.name}
-                                                </h5>
-                                                <Ratings rating={item.rating} />
                                             </div>
-                                        </div>
-                                        {item.commentReplies.map((i: any, index: number) => (
-                                            <div className="w-full flex 800px:ml-16 my-5" key={index}>
-                                                <div className="w-[50px] h-[50px]">
+
+                                            {/* Review Replies */}
+                                            {item.commentReplies.map((i: any, replyIndex: number) => (
+                                                <div key={replyIndex} className="ml-16 mt-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                                                    <div className="flex items-start space-x-4">
+                                                        <div className="flex-shrink-0">
                                                     <Image
                                                         src={
                                                             i.user.avatar
                                                                 ? i.user.avatar.url
                                                                 : "https://res.cloudinary.com/dshp9jnuy/image/upload/v1665822253/avatars/nrxsg8sd9iy10bbsoenn.png"
                                                         }
-                                                        width={50}
-                                                        height={50}
+                                                                width={40}
+                                                                height={40}
                                                         alt=""
-                                                        className="w-[50px] h-[50px] rounded-full object-cover"
+                                                                className="w-10 h-10 rounded-full object-cover"
                                                     />
                                                 </div>
-                                                <div className="pl-2">
-                                                    <div className="flex items-center">
-                                                        <h5 className="text-[20px] text-black dark:text-white">{i.user.name}</h5>{" "}
-                                                        <VscVerifiedFilled className="text-[#0095F6] ml-2 text-[20px]" />
-                                                    </div>
-                                                    <p className="text-black dark:text-white">{i.question}</p>
-                                                    <small className="text-[#ffffff83] ">
-                                                        {format(i.createdAt)} •
-                                                    </small>
+                                                        <div className="flex-1">
+                                                            <div className="flex items-center space-x-2 mb-2">
+                                                                <h5 className="font-semibold text-gray-900 dark:text-white">
+                                                                    {i.user.name}
+                                                                </h5>
+                                                                <VscVerifiedFilled className="text-blue-500 w-5 h-5" />
+                                                            </div>
+                                                            <p className="text-gray-700 dark:text-gray-300 mb-2">
+                                                                {i.question}
+                                                            </p>
+                                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                                {format(i.createdAt)}
+                                                            </p>
+                                                        </div>
                                                 </div>
                                             </div>
                                         ))}
@@ -213,67 +285,94 @@ const CourseDetails = ({
                             )}
                         </div>
                     </div>
-                    <div className="w-full 800px:w-[35%] relative">
-                        <div className="sticky top-[100px] left-0 z-50 w-full">
-                            <CoursePlayer videoUrl={data?.demoUrl} title={data?.title} />
-                            <div className="flex items-center">
-                                <h1 className="pt-5 text-[25px] text-black dark:text-white">
-                                    {data.price === 0 ? "Free" : data.price + "$"}
-                                </h1>
-                                <h5 className="pl-3 text-[20px] mt-2 line-through opacity-80 text-black dark:text-white">
-                                    {data.estimatedPrice}$
-                                </h5>
+                    </div>
 
-                                <h4 className="pl-5 pt-4 text-[22px] text-black dark:text-white">
-                                    {discountPercentagePrice}% Off
-                                </h4>
+                    {/* Sidebar */}
+                    <div className="lg:col-span-1">
+                        <div className="sticky top-8 space-y-6">
+                            {/* Video Player */}
+                            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                            <CoursePlayer videoUrl={data?.demoUrl} title={data?.title} />
                             </div>
-                            <div className="flex items-center">
+
+                            {/* Pricing Card */}
+                            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+                                        {data.price === 0 ? "Free" : `$${data.price}`}
+                                    </h3>
+                                    <div className="flex items-center space-x-2">
+                                        <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
+                                            ${data.estimatedPrice}
+                                        </span>
+                                        <span className="px-2 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-full text-sm font-medium">
+                                            {discountPercentagePrice}% Off
+                                        </span>
+                                    </div>
+                                </div>
+
+                                {/* Action Button */}
+                                <div className="mb-6">
                                 {isPurchased ? (
                                     <Link
-                                        className={`${styles.button} !w-[180px] my-3 font-Poppins cursor-pointer !bg-[crimson]`}
+                                            className="w-full bg-primary text-primary-foreground py-3 px-4 rounded-lg font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center space-x-2"
                                         href={`/course-access/${data._id}`}
                                     >
-                                        Enter to Course
+                                            <FiPlay className="w-5 h-5" />
+                                            <span>Enter to Course</span>
                                     </Link>
                                 ) : (
-                                    <div
-                                        className={`${styles.button} !w-[180px] my-3 font-Poppins cursor-pointer !bg-[crimson]`}
+                                        <button
+                                            className="w-full bg-primary text-primary-foreground py-3 px-4 rounded-lg font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center space-x-2"
                                         onClick={handleOrder}
                                     >
-                                        Buy Now {data.price}$
+                                            <FiCheckCircle className="w-5 h-5" />
+                                            <span>Buy Now ${data.price}</span>
+                                        </button>
+                                    )}
+                                </div>
+
+                                {/* Course Features */}
+                                <div className="space-y-3">
+                                    <div className="flex items-center space-x-3">
+                                        <FiCheckCircle className="w-5 h-5 text-green-500" />
+                                        <span className="text-gray-700 dark:text-gray-300">Source code included</span>
                                     </div>
-                                )}
+                                    <div className="flex items-center space-x-3">
+                                        <FiCheckCircle className="w-5 h-5 text-green-500" />
+                                        <span className="text-gray-700 dark:text-gray-300">Full lifetime access</span>
+                                    </div>
+                                    <div className="flex items-center space-x-3">
+                                        <FiCheckCircle className="w-5 h-5 text-green-500" />
+                                        <span className="text-gray-700 dark:text-gray-300">Certificate of completion</span>
+                                    </div>
+                                    <div className="flex items-center space-x-3">
+                                        <FiCheckCircle className="w-5 h-5 text-green-500" />
+                                        <span className="text-gray-700 dark:text-gray-300">Premium Support</span>
+                                    </div>
+                                </div>
                             </div>
-                            <br />
-                            <p className="pb-1 text-black dark:text-white">
-                                • Source code included
-                            </p>
-                            <p className="pb-1 text-black dark:text-white">
-                                • Full lifetime access
-                            </p>
-                            <p className="pb-1 text-black dark:text-white">
-                                • Certificate of completion
-                            </p>
-                            <p className="pb-3 800px:pb-1 text-black dark:text-white">
-                                • Premium Support
-                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <>
+
+            {/* Payment Modal */}
                 {open && (
-                    <div className="w-full h-screen bg-[#00000036] fixed top-0 left-0 z-50 flex items-center justify-center">
-                        <div className="w-[500px] min-h-[500px] bg-white rounded-xl shadow p-3">
-                            <div className="w-full flex justify-end">
-                                <IoCloseOutline
-                                    size={40}
-                                    className="text-black cursor-pointer"
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                Complete Purchase
+                            </h3>
+                            <button
                                     onClick={() => setOpen(false)}
-                                />
+                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                            >
+                                <IoCloseOutline size={24} />
+                            </button>
                             </div>
-                            <div className="w-full">
+                        <div className="p-6">
                                 {stripePromise && clientSecret && (
                                     <Elements stripe={stripePromise} options={{ clientSecret }}>
                                         <CheckOutForm
@@ -288,7 +387,6 @@ const CourseDetails = ({
                         </div>
                     </div>
                 )}
-            </>
         </div>
     );
 };

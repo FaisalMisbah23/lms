@@ -23,8 +23,9 @@ const CustomModal: FC<Props> = ({
       onClose={() => setOpen(false)}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
+      className="flex items-center justify-center p-4"
     >
-      <Box className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 w-[95%] m-auto  800px:w-[450px] bg-white dark:bg-slate-900 rounded-[8px] shadow p-4 outline-none">
+      <Box className="relative w-full max-w-sm sm:max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-4 sm:p-6 outline-none animate-fade-in border border-gray-200 dark:border-gray-700 max-h-[90vh] overflow-y-auto">
         <Component setOpen={setOpen} setRoute={setRoute} refetch={refetch} />
       </Box>
     </Modal>

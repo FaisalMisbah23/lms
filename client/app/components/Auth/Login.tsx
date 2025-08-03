@@ -8,7 +8,7 @@ import {
   AiFillGithub,
 } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
-import { styles } from "../../style/style";
+import { FiMail, FiLock, FiUser } from "react-icons/fi";
 import { signIn } from "next-auth/react";
 import { useLoginMutation } from "@/redux/features/auth/authApi";
 
@@ -17,17 +17,19 @@ interface Props {
   setOpen: (open: boolean) => void;
   refetch?: any;
 }
-//Validation for email and password input
 
+//Validation for email and password input
 const schema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email")
     .required("Please enter your email"),
   password: Yup.string().required("Please enter your password").min(6),
 });
+
 const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
   const [show, setShow] = useState(false);
   const [login, { isSuccess, error, data }] = useLoginMutation();
+  
   useEffect(() => {
     if (isSuccess) {
       const message = data?.message || "user Login successful!";
@@ -55,89 +57,137 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
 
   return (
     <div className="w-full">
-      <h1 className={styles.title}>Login with Elearning</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="w-full mt-5 relative mb-1">
-          <label className={styles.label} htmlFor="email">
-            Enter Your Email
+      {/* Header */}
+      <div className="text-center mb-6 sm:mb-8">
+        <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full mb-3 sm:mb-4">
+          <FiUser className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
+        </div>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          Welcome Back
+        </h1>
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
+          Sign in to your account to continue learning
+        </p>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        {/* Email Field */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Email Address
           </label>
-          <input
-            type="email"
-            name=""
-            value={values.email}
-            onChange={handleChange}
-            id="email"
-            placeholder="loginmail@gmail.com"
-            className={`${errors.email && touched.email && "border-red-500"} ${styles.input
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FiMail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+            </div>
+            <input
+              type="email"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
+              className={`w-full pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 ${
+                errors.email && touched.email
+                  ? "border-red-500 bg-red-50 dark:bg-red-900/20"
+                  : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
               }`}
-          ></input>
+            />
+          </div>
           {errors.email && touched.email && (
-            <span className="text-red-500 pt-2 block">{errors.email}</span>
+            <p className="text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.email}</p>
           )}
         </div>
-        <div className="w-full mt-5 relative mb-1">
-          <label className={styles.label} htmlFor="password">
-            Enter Your Password
+
+        {/* Password Field */}
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            Password
           </label>
-          <input
-            type={!show ? "password" : "text"}
-            name="password"
-            value={values.password}
-            onChange={handleChange}
-            id="password"
-            placeholder="password!@%"
-            className={`${errors.password && touched.password && "border-red-500"
-              } ${styles.input}`}
-          ></input>
-          {!show ? (
-            <AiOutlineEyeInvisible
-              className="absolute bottom-3 right-2 z-1 cursor-pointer text-black dark:text-white"
-              size={20}
-              onClick={() => setShow(true)}
+          <div className="relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <FiLock className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
+            </div>
+            <input
+              type={!show ? "password" : "text"}
+              name="password"
+              value={values.password}
+              onChange={handleChange}
+              placeholder="Enter your password"
+              className={`w-full pl-9 sm:pl-10 pr-10 sm:pr-12 py-2.5 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 ${
+                errors.password && touched.password
+                  ? "border-red-500 bg-red-50 dark:bg-red-900/20"
+                  : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800"
+              }`}
             />
-          ) : (
-            <AiOutlineEye
-              className="absolute bottom-3 right-2 z-1 cursor-pointer"
-              size={20}
-              onClick={() => setShow(false)}
-            />
+            <button
+              type="button"
+              className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              onClick={() => setShow(!show)}
+            >
+              {!show ? (
+                <AiOutlineEyeInvisible className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hover:text-gray-600" />
+              ) : (
+                <AiOutlineEye className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hover:text-gray-600" />
+              )}
+            </button>
+          </div>
+          {errors.password && touched.password && (
+            <p className="text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.password}</p>
           )}
         </div>
-        {errors.password && touched.password && (
-          <span className="text-red-500 pt-2 block">{errors.password}</span>
-        )}
-        <div className="w-full mt-6">
-          <input
-            type="submit"
-            value="Login"
-            className={`${styles.button} hover:bg-[#0b4b8b]`}
-          />
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full bg-primary text-primary-foreground py-2.5 sm:py-3 px-4 rounded-lg text-sm sm:text-base font-medium hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:ring-offset-2 transition-all duration-200 shadow-sm hover:shadow-md"
+        >
+          Sign In
+        </button>
+
+        {/* Divider */}
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-gray-300 dark:border-gray-600" />
+          </div>
+          <div className="relative flex justify-center text-xs sm:text-sm">
+            <span className="px-2 bg-white dark:bg-gray-900 text-gray-500">Or continue with</span>
+          </div>
         </div>
-        <br />
-        <h5 className="text-center pt-4 font-Poppins text-[14px] text-black dark:text-white">
-          Or join with
-        </h5>
-        <div className="flex items-center justify-center my-3">
-          <FcGoogle
-            size={30}
-            className="cursor-pointer mr-2"
+
+        {/* Social Login */}
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
+          <button
+            type="button"
             onClick={() => signIn("google")}
-          />
-          <AiFillGithub
-            size={30}
-            className="cursor-pointer ml-2 text-black dark:text-white"
-            onClick={() => signIn("github")}
-          />
-        </div>
-        <h5 className="text-center pt-4 font-Poppins text-[14px] text-black dark:text-white ">
-          Not have any account?{" "}
-          <span
-            className="text-[#2190ff] pl-1 cursor-pointer"
-            onClick={() => setRoute("Sign-Up")}
+            className="w-full inline-flex justify-center items-center px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-800 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
           >
-            Sign up
-          </span>
-        </h5>
+            <FcGoogle className="h-4 w-4 sm:h-5 sm:w-5 mr-1.5 sm:mr-2" />
+            Google
+          </button>
+          <button
+            type="button"
+            onClick={() => signIn("github")}
+            className="w-full inline-flex justify-center items-center px-3 sm:px-4 py-2 sm:py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm bg-white dark:bg-gray-800 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200"
+          >
+            <AiFillGithub className="h-4 w-4 sm:h-5 sm:w-5 mr-1.5 sm:mr-2" />
+            GitHub
+          </button>
+        </div>
+
+        {/* Sign Up Link */}
+        <div className="text-center">
+          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={() => setRoute("Sign-Up")}
+              className="font-medium text-primary hover:text-primary/80 transition-colors duration-200"
+            >
+              Sign up
+            </button>
+          </p>
+        </div>
       </form>
     </div>
   );

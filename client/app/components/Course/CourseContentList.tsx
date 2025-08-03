@@ -2,6 +2,7 @@
 import React, { FC, useState } from "react";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 import { MdOutlineOndemandVideo } from "react-icons/md";
+import { FiPlay, FiClock } from "react-icons/fi";
 
 type Props = {
     data: any;
@@ -20,7 +21,6 @@ const CourseContentList: FC<Props> = (props) => {
         ...new Set<string>(props.data?.map((item: any) => item.videoSection)),
     ];
 
-
     let totalCount: number = 0; // Total count of videos from previous sections
 
     const toggleSection = (section: string) => {
@@ -34,10 +34,7 @@ const CourseContentList: FC<Props> = (props) => {
     };
 
     return (
-        <div
-            className={`mt-[15px] w-full ${!props.isDemo && "ml-[-30px] min-h-screen sticky top-24 left-0 z-30"
-                }`}
-        >
+        <div className="space-y-4">
             {videoSections.map((section: string) => {
                 const isSectionVisible = visibleSections.has(section);
 
@@ -58,69 +55,87 @@ const CourseContentList: FC<Props> = (props) => {
 
                 return (
                     <div
-                        className={`${!props.isDemo &&
-                            "border-b border-[#0000001c] dark:border-[#ffffff8e] pb-2"
-                            }`}
+                        className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden"
                         key={section}
                     >
-                        <div className="w-full flex">
-                            {/* Render video section */}
-                            <div className="w-full flex justify-between items-center">
-                                <h2 className="text-[22px] text-black dark:text-white">
-                                    {section}
-                                </h2>
+                        {/* Section Header */}
+                        <div className="bg-gray-50 dark:bg-gray-800/50 p-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                                        {section}
+                                    </h3>
+                                    <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-300">
+                                        <div className="flex items-center space-x-1">
+                                            <FiPlay className="w-4 h-4" />
+                                            <span>{sectionVideoCount} Lessons</span>
+                                        </div>
+                                        <div className="flex items-center space-x-1">
+                                            <FiClock className="w-4 h-4" />
+                                            <span>
+                                                {sectionVideoLength < 60
+                                                    ? sectionVideoLength
+                                                    : sectionContentHours.toFixed(2)}{" "}
+                                                {sectionVideoLength > 60 ? "hours" : "minutes"}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <button
-                                    className="mr-4 cursor-pointer text-black dark:text-white"
+                                    className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
                                     onClick={() => toggleSection(section)}
                                 >
                                     {isSectionVisible ? (
-                                        <BsChevronUp size={20} />
+                                        <BsChevronUp className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                                     ) : (
-                                        <BsChevronDown size={20} />
+                                        <BsChevronDown className="w-5 h-5 text-gray-600 dark:text-gray-300" />
                                     )}
                                 </button>
                             </div>
                         </div>
-                        <h5 className="text-black dark:text-white">
-                            {sectionVideoCount} Lessons ·{" "}
-                            {sectionVideoLength < 60
-                                ? sectionVideoLength
-                                : sectionContentHours.toFixed(2)}{" "}
-                            {sectionVideoLength > 60 ? "hours" : "minutes"}
-                        </h5>
-                        <br />
+
+                        {/* Section Content */}
                         {isSectionVisible && (
-                            <div className="w-full">
+                            <div className="bg-white dark:bg-gray-800">
                                 {sectionVideos.map((item: any, index: number) => {
                                     const videoIndex: number = sectionStartIndex + index; // Calculate the video index within the overall list
                                     const contentLength: number = item.videoLength / 60;
                                     return (
                                         <div
-                                            className={`w-full ${videoIndex === props.activeVideo ? "bg-slate-800" : ""
-                                                } cursor-pointer transition-all p-2`}
+                                            className={`border-b border-gray-100 dark:border-gray-700 last:border-b-0 ${
+                                                videoIndex === props.activeVideo 
+                                                    ? "bg-primary/5 border-l-4 border-l-primary" 
+                                                    : "hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                                            } transition-all duration-200`}
                                             key={item._id}
                                             onClick={() =>
                                                 props.isDemo ? null : props?.setActiveVideo(videoIndex)
                                             }
                                         >
-                                            <div className="flex items-start">
-                                                <div>
-                                                    <MdOutlineOndemandVideo
-                                                        size={25}
-                                                        className="mr-2"
-                                                        color="#1cdada"
-                                                    />
+                                            <div className="p-4 cursor-pointer">
+                                                <div className="flex items-start space-x-3">
+                                                    <div className="flex-shrink-0 mt-1">
+                                                        <MdOutlineOndemandVideo
+                                                            size={20}
+                                                            className="text-primary"
+                                                        />
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <h4 className="text-sm font-medium text-gray-900 dark:text-white mb-1 line-clamp-2">
+                                                            {item.title}
+                                                        </h4>
+                                                        <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-400">
+                                                            <FiClock className="w-3 h-3" />
+                                                            <span>
+                                                                {item.videoLength > 60
+                                                                    ? contentLength.toFixed(2)
+                                                                    : item.videoLength}{" "}
+                                                                {item.videoLength > 60 ? "hours" : "minutes"}
+                                                            </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <h1 className="text-[18px] inline-block break-words text-black dark:text-white">
-                                                    {item.title}
-                                                </h1>
                                             </div>
-                                            <h5 className="pl-8 text-black dark:text-white">
-                                                {item.videoLength > 60
-                                                    ? contentLength.toFixed(2)
-                                                    : item.videoLength}{" "}
-                                                {item.videoLength > 60 ? "hours" : "minutes"}
-                                            </h5>
                                         </div>
                                     );
                                 })}

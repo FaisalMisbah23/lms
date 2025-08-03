@@ -5,6 +5,7 @@ interface Props {
   activeItem: number;
   isMobile: boolean;
 }
+
 export const navItemsData = [
   {
     name: "Home",
@@ -27,50 +28,46 @@ export const navItemsData = [
     url: "/faq",
   },
 ];
+
 const NavItems: FC<Props> = ({ activeItem, isMobile }) => {
   return (
     <>
-      <div className="hidden 800px:flex">
-        {navItemsData &&
-          navItemsData.map((i, index) => (
-            <Link href={`${i.url}`} key={index} passHref>
-              <span
-                className={`${
-                  activeItem === index
-                    ? "dark:text-[#37a39a] text-[crimson]"
-                    : "dark:text-white text-black"
-                } text-[18px] px-6 font-Poppins font-[400]`}
-              >
-                {i.name}
-              </span>
+      {/* Desktop Navigation */}
+      <div className="hidden lg:flex items-center space-x-1">
+        {navItemsData.map((item, index) => (
+          <Link 
+            href={item.url} 
+            key={index}
+            className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+              activeItem === index
+                ? "text-primary bg-primary/10"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            }`}
+          >
+            {item.name}
+            {activeItem === index && (
+              <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary rounded-full" />
+            )}
+          </Link>
+        ))}
+      </div>
+
+      {/* Mobile Navigation */}
+      {isMobile && (
+        <div className="space-y-2">
+          {navItemsData.map((item, index) => (
+            <Link 
+              href={item.url} 
+              key={index}
+              className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
+                activeItem === index
+                  ? "text-primary bg-primary/10 border-l-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              }`}
+            >
+              {item.name}
             </Link>
           ))}
-      </div>
-      {isMobile && (
-        <div className="800px:hidden mt-5">
-          <div className="w-full text-center py-6">
-            <Link href={"/"} passHref>
-              <span
-                className={`text-[25px] font-Poppins font-[500] text-black dark:text-white`}
-              >
-                ELearning
-              </span>
-            </Link>
-          </div>
-          {navItemsData &&
-            navItemsData.map((i, index) => (
-              <Link href="/" passHref key={index}>
-                <span
-                  className={`${
-                    activeItem === index
-                      ? "dark:text-[#37a39a] text-[crimson]"
-                      : "dark:text-white text-black"
-                  } block py-5 text-[18px] px-6 font-Poppins font-[400]`}
-                >
-                  {i.name}
-                </span>
-              </Link>
-            ))}
         </div>
       )}
     </>

@@ -29,10 +29,10 @@ const CreateCourse = () => {
             if ("data" in error) {
                 const errorMessage = error as any
                 toast.error(errorMessage.data.message)
-
             }
         }
     }, [isSuccess, error])
+    
     const [courseInfo, setCourseInfo] = useState({
         name: "",
         description: "",
@@ -108,11 +108,22 @@ const CreateCourse = () => {
     }
 
     return (
-        <div className="w-full flex flex-col min-h-screen">
-            <div className="w-[20%] mt-[100px] h-full 800px:h-screen 800px:fixed z-[-1] top-18 right-0">
+        <div className="w-full">
+            {/* Header */}
+            <div className="mb-6">
+                <h1 className="text-2xl font-bold text-foreground">Create Course</h1>
+                <p className="text-muted-foreground mt-1">
+                    Build your course step by step. Fill in the information below to create your course.
+                </p>
+            </div>
+
+            {/* Progress Steps */}
+            <div className="mb-8">
                 <CourseOptions active={active} setActive={setActive} />
             </div>
-            <div className="w-[100%] 800px:w-[80%]">
+
+            {/* Main Content */}
+            <div className="w-full">
                 {active === 0 && (
                     <CourseInformation
                         courseInfo={courseInfo}

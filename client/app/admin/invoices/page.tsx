@@ -1,29 +1,25 @@
-'use client'
-import React from 'react'
-import Heading from '../../utils/Heading';
-import AdminSidebar from '@/app/components/admin/sidebar/AdminSidebar';
-import DashboardHeader from '@/app/components/admin/DashBoardHeader';
-import AllInvoices from '@/app/components/admin/Orders/AllInvoices';
+"use client";
+
+import AllInvoices from "../../components/admin/Orders/AllInvoices";
+import AdminLayout from "../../components/admin/AdminLayout";
+import Heading from "../../utils/Heading";
+import AdminProtected from "../../hooks/adminProtected";
+import React from "react";
 
 const Page = () => {
     return (
-        <div>
+        <AdminProtected>
             <Heading
                 title="Invoices - Admin | Elearning"
                 description="Elearning is a platform for students to learn and get help from teachers"
                 keywords="Programming, MERN, Redux, Machine Learning"
             />
-            <div className="flex">
-                <div className="1500px:w-[16%] w-1/5">
-                    <AdminSidebar />
-                </div>
-                <div className="w-[85%]">
-                    <DashboardHeader />
-                    <AllInvoices />
-                </div>
-            </div>
-        </div>
-    )
-}
+            
+            <AdminLayout>
+                <AllInvoices />
+            </AdminLayout>
+        </AdminProtected>
+    );
+};
 
-export default Page
+export default Page;

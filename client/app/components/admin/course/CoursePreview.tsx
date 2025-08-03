@@ -50,13 +50,13 @@ const CoursePreview: FC<Props> = ({
           <h5 className="pl-3 text-[20px] mt-2 line-through opacity-80 dark:text-gray-400 text-gray-600">
             {courseData?.estimatedPrice}$
           </h5>
-          <h4 className="pl-5 pt-4 text-[22px] text-[#37a39a] dark:text-[#3ccba0]">
+          <h4 className="pl-5 pt-4 text-[22px] text-primary">
             {discountPercentagePrice}% Off
           </h4>
         </div>
         <div className="flex items-center">
           <div
-            className={`${styles.button} !w-[180px] my-3 font-Poppins !bg-[crimson] cursor-not-allowed dark:!bg-[#b91c1c] dark:!text-white`}
+            className={`${styles.button} !w-[180px] my-3 font-Poppins bg-red-500 text-white cursor-not-allowed`}
           >
             Buy Now {courseData?.price}$
           </div>
@@ -70,7 +70,7 @@ const CoursePreview: FC<Props> = ({
             className={`${styles.input} 1500px:!w-[50%] 1100px:w-[60%] ml-3 !mt-0 dark:!bg-[#1a2236] dark:!text-white dark:!border-[#2d3a4e]`}
           />
           <div
-            className={`${styles.button} !w-[120px] my-3 ml-4 font-Poppins cursor-pointer dark:!bg-[#37a39a] dark:!text-white`}
+            className={`${styles.button} !w-[120px] my-3 ml-4 font-Poppins cursor-pointer bg-primary text-primary-foreground`}
           >
             Apply
           </div>
@@ -131,17 +131,21 @@ const CoursePreview: FC<Props> = ({
         <br />
         <br />
       </div>
-      <div className="w-full flex items-center justify-between">
-        <div
-          className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 m-[20px] cursor-pointer" onClick={prevButton}
+      <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3 mt-6">
+        <button
+          type="button"
+          onClick={prevButton}
+          className="w-full sm:w-auto px-6 py-3 bg-muted text-muted-foreground rounded-lg font-medium hover:bg-muted/80 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-muted/20"
         >
           Prev
-        </div>
-        <div
-          className="w-full 800px:w-[180px] flex items-center justify-center h-[40px] bg-[#37a39a] text-center text-[#fff] rounded mt-8 m-[20px] cursor-pointer" onClick={createCourse}
+        </button>
+        <button
+          type="button"
+          onClick={createCourse}
+          className="w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20"
         >
           {isEdit ? "Update" : "Create"}
-        </div>
+        </button>
       </div>
     </div>
   );

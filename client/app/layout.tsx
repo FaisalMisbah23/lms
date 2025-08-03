@@ -12,7 +12,6 @@ import socketIO from "socket.io-client"
 const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || ""
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] })
 
-
 const poppins = Poppins({
   variable: "--font-Poppins",
   subsets: ["latin"],
@@ -37,15 +36,33 @@ export default function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#0ea5e9" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
       </head>
       <body
-        className={`${poppins.variable} ${josefin.variable} !bg-white bg-no-repeat dark:bg-gradient-to-b dark:from-gray-900 dark:to-black duration-300`}
+        className={`${poppins.variable} ${josefin.variable} antialiased bg-background text-foreground transition-colors duration-300`}
         suppressHydrationWarning
       >
         <Providers>
           <SessionProvider>
-            <ThemeProvider attribute="class">
-              <Toaster position="top-center" reverseOrder={false} />
+            <ThemeProvider 
+              attribute="class" 
+              defaultTheme="system" 
+              enableSystem 
+              disableTransitionOnChange
+            >
+              <Toaster 
+                position="top-center" 
+                reverseOrder={false}
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: 'hsl(var(--card))',
+                    color: 'hsl(var(--card-foreground))',
+                    border: '1px solid hsl(var(--border))',
+                  },
+                }}
+              />
               <Custom>{children}</Custom>
             </ThemeProvider>
           </SessionProvider>
@@ -54,7 +71,6 @@ export default function RootLayout({
     </html>
   );
 }
-
 
 const Custom: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isLoading } = useLoadUserQuery({});

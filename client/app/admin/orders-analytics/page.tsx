@@ -1,28 +1,24 @@
 "use client";
-import React from "react";
-import AdminSidebar from "../../components/admin/sidebar/AdminSidebar";
-import Heading from "../../utils/Heading";
+
 import OrdersAnalytics from "../../components/admin/Analytics/OrdersAnalytics";
-import DashBoardHero from "@/app/components/admin/DashBoardHero";
+import AdminLayout from "../../components/admin/AdminLayout";
+import Heading from "../../utils/Heading";
+import AdminProtected from "../../hooks/adminProtected";
+import React from "react";
 
 const Page = () => {
     return (
-        <div>
+        <AdminProtected>
             <Heading
                 title="Orders Analytics - Admin | Elearning"
                 description="Elearning is a platform for students to learn and get help from teachers"
                 keywords="Programming, MERN, Redux, Machine Learning"
             />
-            <div className="flex">
-                <div className="1500px:w-[19%] w-1/5">
-                    <AdminSidebar />
-                </div>
-                <div className="w-[85%]">
-                    <DashBoardHero />
-                    <OrdersAnalytics />
-                </div>
-            </div>
-        </div>
+            
+            <AdminLayout>
+                <OrdersAnalytics />
+            </AdminLayout>
+        </AdminProtected>
     );
 };
 
