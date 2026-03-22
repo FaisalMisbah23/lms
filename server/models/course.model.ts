@@ -155,5 +155,8 @@ const courseSchema = new Schema<ICourse>(
   { timestamps: true }
 );
 
+courseSchema.index({ categories: 1 });
+courseSchema.index({ createdAt: -1 });
+
 const Course: Model<ICourse> = mongoose.model("Course", courseSchema);
 export default Course;

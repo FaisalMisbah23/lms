@@ -6,21 +6,15 @@ const Footer = () => {
   const footerLinks = {
     company: [
       { name: "About Us", href: "/about" },
-      { name: "Our Story", href: "/about" },
-      { name: "Careers", href: "/careers" },
-      { name: "Press", href: "/press" },
+      { name: "FAQ", href: "/faq" },
     ],
     resources: [
       { name: "Courses", href: "/courses" },
-      { name: "Blog", href: "/blog" },
-      { name: "Help Center", href: "/help" },
-      { name: "Contact", href: "/contact" },
+      { name: "FAQ", href: "/faq" },
+      { name: "Contact", href: "mailto:hello@elearning.com" },
     ],
     support: [
-      { name: "Help Center", href: "/help" },
-      { name: "Privacy Policy", href: "/privacy" },
-      { name: "Terms of Service", href: "/terms" },
-      { name: "Cookie Policy", href: "/cookies" },
+      { name: "Privacy & policy", href: "/policy" },
     ],
     social: [
       { name: "YouTube", href: "https://www.youtube.com/", icon: FiYoutube },
@@ -77,13 +71,13 @@ const Footer = () => {
             <ul className="space-y-4">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
-                                <Link
+                  <Link
                     href={link.href}
                     className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
-                                >
+                  >
                     {link.name}
-                                </Link>
-                            </li>
+                  </Link>
+                </li>
               ))}
                         </ul>
                     </div>
@@ -94,13 +88,13 @@ const Footer = () => {
                         <ul className="space-y-4">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
-                                <Link
+                  <Link
                     href={link.href}
                     className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
-                                >
+                  >
                     {link.name}
-                                </Link>
-                            </li>
+                  </Link>
+                </li>
               ))}
                         </ul>
                     </div>
@@ -111,13 +105,13 @@ const Footer = () => {
                         <ul className="space-y-4">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
-                                <Link
+                  <Link
                     href={link.href}
                     className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
-                                >
+                  >
                     {link.name}
-                                </Link>
-                            </li>
+                  </Link>
+                </li>
               ))}
                         </ul>
                     </div>
@@ -150,14 +144,8 @@ const Footer = () => {
               © 2024 ELearning. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-300">
-              <Link href="/privacy" className="hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
-                Privacy Policy
-              </Link>
-              <Link href="/terms" className="hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
-                Terms of Service
-              </Link>
-              <Link href="/cookies" className="hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
-                Cookie Policy
+              <Link href="/policy" className="hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
+                Privacy & policy
               </Link>
             </div>
           </div>

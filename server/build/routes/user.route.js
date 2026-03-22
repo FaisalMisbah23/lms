@@ -4,12 +4,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const express_rate_limit_1 = require("express-rate-limit");
 const user_controller_1 = require("../controllers/user.controller");
 const auth_1 = require("../middleware/auth");
 const userRouter = express_1.default.Router();
-userRouter.post("/register", user_controller_1.registerUser);
-userRouter.post("/activate-user", user_controller_1.activateUser);
-userRouter.post("/login", user_controller_1.loginUser);
+const authLimiter = (0, express_rate_limit_1.rateLimit)({
+    windowMs: 15 * 60 * 1000,
+    max: 30,
+    standardHeaders: "draft-7",
+    legacyHeaders: false,
+    skip: () => process.env.NODE_ENV === "test",
+    message: { success: false, message: "Too many attempts, try again later." },
+});
+userRouter.post("/register", authLimiter, user_controller_1.registerUser);
+userRouter.post("/activate-user", authLimiter, user_controller_1.activateUser);
+userRouter.post("/login", authLimiter, user_controller_1.loginUser);
 userRouter.post("/logout", user_controller_1.updateAccessToken, user_controller_1.updateAccessToken, auth_1.isAuthenticated, user_controller_1.logoutUser);
 userRouter.post("/refresh-token", user_controller_1.updateAccessToken);
 userRouter.get("/me", user_controller_1.updateAccessToken, user_controller_1.updateAccessToken, auth_1.isAuthenticated, user_controller_1.getUser);

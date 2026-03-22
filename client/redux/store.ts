@@ -21,9 +21,7 @@ const initializeApp = async () => {
     );
   } catch (error) {}
   try {
-    await store.dispatch(
-      apiSlice.endpoints.loadUser.initiate({}, { forceRefetch: true })
-    );
+    await store.dispatch(apiSlice.endpoints.loadUser.initiate({}));
   } catch (error) {}
 };
 

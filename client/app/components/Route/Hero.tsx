@@ -15,9 +15,7 @@ import Client3 from "../../../public/assests/client-3.jpg";
 const Hero = () => {
   const clients = [Client1, Client2, Client3];
   const [search, setSearch] = useState("");
-  const { data, isLoading } = useGetHeroDataQuery("Banner", {
-    refetchOnMountOrArgChange: true,
-  });
+  const { data, isLoading } = useGetHeroDataQuery("Banner");
   const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -129,6 +127,7 @@ const Hero = () => {
                   src={data?.layout?.banner?.image?.url || "/assests/hero-banner.png"}
                   width={600}
                   height={400}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                   alt="Learning Platform"
                   className="w-full h-auto object-cover"
                   priority

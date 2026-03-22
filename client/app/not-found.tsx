@@ -50,7 +50,7 @@ export default function NotFound() {
             <span className="text-sm font-medium text-foreground">Try searching for what you need</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Use the search bar in the header to find courses, or browse our categories.
+            Use the search on the home page to find courses, or open the courses catalog.
           </p>
         </div>
 

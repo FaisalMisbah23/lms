@@ -33,7 +33,6 @@ const CourseContent = ({ id, user }: Props) => {
         return (
             <div className="min-h-screen bg-background">
                 <Header
-                    activeItem={1}
                     open={open}
                     setOpen={setOpen}
                     route={route}
@@ -59,7 +58,6 @@ const CourseContent = ({ id, user }: Props) => {
     return (
         <div className="min-h-screen bg-background">
                     <Header
-                        activeItem={1}
                         open={open}
                         setOpen={setOpen}
                         route={route}

@@ -4,13 +4,12 @@ import React, { FC, useEffect, useState } from "react";
 import NavItems from "../utils/NavItems";
 import ThemeSwitcher from "../utils/ThemeSwitcher";
 import { useTheme } from "next-themes";
-import { HiOutlineMenuAlt3, HiOutlineUserCircle, HiOutlineX } from "react-icons/hi";
-import { FiSearch, FiBell, FiBookmark } from "react-icons/fi";
+import { HiOutlineMenuAlt3, HiOutlineX } from "react-icons/hi";
+import { usePathname } from "next/navigation";
 import CustomModal from "../utils/CustomModal";
 import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
 import Verification from "./Auth/Verification";
-import { useSelector } from "react-redux";
 import Image from "next/image";
 import avatar from "../../public/assests/avatardefault.jpg";
 import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
@@ -21,23 +20,16 @@ import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 interface HeaderProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  activeItem: number;
   route: string;
   setRoute: (route: string) => void;
 }
 
-const Header: FC<HeaderProps> = ({
-  activeItem,
-  setOpen,
-  open,
-  route,
-  setRoute,
-}) => {
+const Header: FC<HeaderProps> = ({ setOpen, open, route, setRoute }) => {
+  const pathname = usePathname();
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
   const [logout, setLogout] = useState(false);
   const { theme } = useTheme();
-  const { user } = useSelector((state: any) => state.auth)
   const { data: userData, isLoading, refetch } = useLoadUserQuery(undefined, {})
   const { data } = useSession();
   const [socialAuth] = useSocialAuthMutation();
@@ -109,7 +101,7 @@ const Header: FC<HeaderProps> = ({
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
-                <NavItems activeItem={activeItem} isMobile={false} />
+                <NavItems isMobile={false} />
             </nav>
 
             {/* Right Side Actions */}
@@ -135,7 +127,7 @@ const Header: FC<HeaderProps> = ({
                         height={36}
                         className="w-9 h-9 rounded-full border-2 border-transparent group-hover:border-primary transition-all duration-200"
                       />
-                      {activeItem === 5 && (
+                      {pathname === "/profile" && (
                         <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-primary rounded-full border-2 border-background"></div>
                       )}
                     </div>
@@ -189,7 +181,7 @@ const Header: FC<HeaderProps> = ({
 
                 {/* Navigation */}
                 <div className="flex-1 p-6">
-                    <NavItems activeItem={activeItem} isMobile={true} />
+                    <NavItems isMobile={true} />
                 </div>
 
                 {/* User Actions */}
@@ -246,7 +238,6 @@ const Header: FC<HeaderProps> = ({
                 open={open}
                 setOpen={setOpen}
                 setRoute={setRoute}
-                activeItem={activeItem}
                 component={Login}
                 refetch={refetch}
               />
@@ -257,7 +248,6 @@ const Header: FC<HeaderProps> = ({
                 open={open}
                 setOpen={setOpen}
                 setRoute={setRoute}
-                activeItem={activeItem}
                 component={SignUp}
                 refetch={refetch}
               />
@@ -268,7 +258,6 @@ const Header: FC<HeaderProps> = ({
                 open={open}
                 setOpen={setOpen}
                 setRoute={setRoute}
-                activeItem={activeItem}
                 component={Verification}
                 refetch={refetch}
               />

@@ -4,12 +4,9 @@ import { FC, useEffect, useRef, useState } from "react"
 import { IoMdNotificationsOutline } from "react-icons/io"
 import { format } from "timeago.js"
 import ThemeSwitcher from "../../../app/utils/ThemeSwitcher"
-import socketIO from "socket.io-client"
+import { getSocket } from "@/app/lib/socketClient"
 import { useGetAllNotificationsQuery, useUpdateNotificationStatusMutation } from "@/redux/features/notifications/notificationApi"
 import { FiBell, FiX } from "react-icons/fi"
-
-const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || ""
-const socketId = socketIO(ENDPOINT, { transports: ["websocket"] })
 
 type Props = {
     open?: boolean
@@ -50,11 +47,16 @@ const DashboardHeader: FC<Props> = () => {
     }, [data, isSuccess])
 
     useEffect(() => {
-        socketId.on("newNotification", (data) => {
-            refetch()
+        const socket = getSocket();
+        const onNew = () => {
+            refetch();
             playNotificationSound();
-        })
-    }, [])
+        };
+        socket.on("newNotification", onNew);
+        return () => {
+            socket.off("newNotification", onNew);
+        };
+    }, [refetch]);
 
     // Close dropdown when clicking outside
     useEffect(() => {

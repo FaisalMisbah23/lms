@@ -9,9 +9,7 @@ import {
 import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
-import socketIO from "socket.io-client"
-const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || ""
-const socketId = socketIO(ENDPOINT, { transports: ["websocket"] })
+import { getSocket } from "@/app/lib/socketClient"
 
 type Props = {
     setOpen: any;
@@ -30,41 +28,95 @@ const CheckOutForm = ({ data, user }: Props) => {
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
+
         if (!stripe || !elements) {
-            toast.error("Stripe.js has not loaded yet.");
+            toast.error("Payment system not ready. Please wait and try again.");
             return;
         }
-        setIsLoading(true);
-        const { error, paymentIntent } = await stripe.confirmPayment({
 
+        setIsLoading(true);
+
+        toast.loading("Processing payment...");
+
+        const { error, paymentIntent } = await stripe.confirmPayment({
             elements,
             redirect: "if_required",
         });
+
         if (error) {
+            toast.dismiss();
+            toast.error(`Payment failed: ${error.message}`);
             setMessage(error.message);
             setIsLoading(false);
-        } else if (paymentIntent && paymentIntent.status === "succeeded") {
-            setIsLoading(false);
-            createOrder({ courseId: data._id, payment_info: paymentIntent });
+            return;
         }
+
+        // Fallback logic
+        let finalPaymentIntent = paymentIntent;
+
+        if (!paymentIntent || paymentIntent.status !== "succeeded") {
+            const clientSecret = elements._clientSecret;
+            if (!clientSecret) {
+                toast.dismiss();
+                toast.error("Something went wrong. Please refresh and try again.");
+                setIsLoading(false);
+                return;
+            }
+
+            const result = await stripe.retrievePaymentIntent(clientSecret);
+            finalPaymentIntent = result.paymentIntent;
+        }
+
+        // Final success condition
+        if (finalPaymentIntent && finalPaymentIntent.status === "succeeded") {
+            toast.dismiss();
+            toast.success("🎉 Payment successful! Unlocking course...");
+            createOrder({
+                courseId: data._id,
+                payment_info: finalPaymentIntent,
+            });
+        } else {
+            toast.dismiss();
+            toast.error("Payment not completed. Please try again.");
+        }
+
+        setIsLoading(false);
     };
 
     useEffect(() => {
-        if (orderData) {
-            socketId.emit("notification", {
-                title: "New Order",
-                message: `You have a new order from ${data.name}`,
-                userId: user._id,
-            });
-            redirect(`/course-access/${data._id}`);
-        }
-        if (error) {
-            if ("data" in error) {
-                const errorMessage = error as any;
-                toast.error(errorMessage.data.message);
+        const handleRedirect = async () => {
+            try {
+                if (refetch) {
+                    await refetch(); // Ensure user has course access
+                }
+    
+                toast.dismiss(); // Clear any loading toasts
+                toast.success("🎉 Course purchased successfully!");
+    
+                getSocket().emit("notification", {
+                    title: "New Order",
+                    message: `You have a new order from ${data.name}`,
+                    userId: user._id,
+                });
+    
+                setTimeout(() => {
+                    redirect(`/course-access/${data._id}`);
+                }, 1000);
+            } catch (err) {
+                toast.error("⚠️ Course access update failed. Try refreshing.");
             }
+        };
+    
+        if (orderData) {
+            handleRedirect();
+        }
+    
+        if (error) {
+            toast.error("❌ Order creation failed after payment.");
         }
     }, [orderData, error]);
+    
+
 
     return (
         <form id="payment-form" onSubmit={handleSubmit}>

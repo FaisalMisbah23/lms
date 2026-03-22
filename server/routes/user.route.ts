@@ -1,4 +1,5 @@
 import express from "express";
+import { rateLimit } from "express-rate-limit";
 import {
   activateUser,
   deleteUser,
@@ -18,9 +19,18 @@ import { authorizeRoles, isAuthenticated } from "../middleware/auth";
 
 const userRouter = express.Router();
 
-userRouter.post("/register", registerUser);
-userRouter.post("/activate-user", activateUser);
-userRouter.post("/login", loginUser);
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 30,
+  standardHeaders: "draft-7",
+  legacyHeaders: false,
+  skip: () => process.env.NODE_ENV === "test",
+  message: { success: false, message: "Too many attempts, try again later." },
+});
+
+userRouter.post("/register", authLimiter, registerUser);
+userRouter.post("/activate-user", authLimiter, activateUser);
+userRouter.post("/login", authLimiter, loginUser);
 userRouter.post(
   "/logout",
   updateAccessToken,

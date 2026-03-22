@@ -125,5 +125,7 @@ const courseSchema = new mongoose_1.Schema({
         default: 0,
     },
 }, { timestamps: true });
+courseSchema.index({ categories: 1 });
+courseSchema.index({ createdAt: -1 });
 const Course = mongoose_1.default.model("Course", courseSchema);
 exports.default = Course;

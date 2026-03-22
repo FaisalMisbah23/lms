@@ -38,6 +38,9 @@ const orderSchema = new mongoose_1.Schema({
     userId: { type: String, required: true },
     courseId: { type: String, required: true },
     payment_info: Object,
+    stripePaymentIntentId: { type: String, sparse: true, unique: true },
 }, { timestamps: true });
+orderSchema.index({ userId: 1, courseId: 1 });
+orderSchema.index({ createdAt: -1 });
 const Order = mongoose_1.default.model("Order", orderSchema);
 exports.default = Order;

@@ -37,7 +37,7 @@ const CourseDetailsPage = ({ id }: Props) => {
         }
         if (data && userData?.user) {
             const amount = Math.round(data.course.price * 100);
-            createPayment(amount);
+            createPayment({ amount, courseId: data.course._id });
         }
     }, [config, createPayment, data, userData]);
 
@@ -85,7 +85,6 @@ const CourseDetailsPage = ({ id }: Props) => {
             <Header
                 open={open}
                 setOpen={setOpen}
-                activeItem={1}
                 setRoute={setRoute}
                 route={route}
             />

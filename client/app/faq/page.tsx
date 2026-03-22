@@ -8,7 +8,6 @@ import Footer from "../components/Footer";
 
 const Page = () => {
     const [open, setOpen] = useState(false);
-    const [activeItem, setActiveItem] = useState(4);
     const [route, setRoute] = useState("Login");
 
     return (
@@ -21,7 +20,6 @@ const Page = () => {
             <Header
                 open={open}
                 setOpen={setOpen}
-                activeItem={activeItem}
                 setRoute={setRoute}
                 route={route}
             />

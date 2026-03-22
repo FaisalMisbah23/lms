@@ -5,12 +5,8 @@ import "./globals.css";
 import { Providers } from "./Provider";
 import { Toaster } from "react-hot-toast";
 import { SessionProvider } from "next-auth/react";
-import React, { useEffect } from "react";
-import Loader from "./components/Loader/Loader";
+import React from "react";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
-import socketIO from "socket.io-client"
-const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || ""
-const socketId = socketIO(ENDPOINT, { transports: ["websocket"] })
 
 const poppins = Poppins({
   variable: "--font-Poppins",
@@ -73,15 +69,9 @@ export default function RootLayout({
 }
 
 const Custom: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isLoading } = useLoadUserQuery({});
+  // Always render children here. Gating on isLoading caused SSR vs client mismatches
+  // (RTK Query initial state differs), which breaks hydration.
+  useLoadUserQuery({});
 
-  useEffect(() => {
-    socketId.on("connection", () => { })
-  }, [])
-
-  return (
-    <>
-      {isLoading ? <Loader /> : <>{children}</>}
-    </>
-  )
-}
+  return <>{children}</>;
+};

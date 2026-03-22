@@ -1,5 +1,8 @@
-# Elearning
-### A Scalable, Secure, and Performance-Optimized LMS
+# LMS
+
+**Learning Management System · TypeScript, Node, Express, MongoDB, Redis, Next.js, Socket.IO**
+
+A scalable, secure, and performance-optimized LMS for online courses, user and admin dashboards, OTP auth, and DRM-protected video streaming.
 
 ## Overview
 
@@ -201,6 +204,16 @@ Login → Create Course → Add Lessons/FAQs → Manage Users → View Orders �
 
 **Deployment**
 - Deployment rollback-ready
+
+---
+
+## Production checklist
+
+- Copy [`server/.env.example`](server/.env.example) and [`client/.env.example`](client/.env.example) into real `.env` files and fill every value. In production, the API exits on startup if required variables are missing.
+- Set `ORIGIN` to your live frontend URL (comma-separate multiple origins if needed, e.g. Vercel preview + production).
+- **Stripe:** create a webhook in the Stripe Dashboard pointing to `https://<your-api-host>/api/v1/webhook/stripe`, subscribe to `payment_intent.succeeded`, and set `STRIPE_WEBHOOK_SECRET` from the signing secret. PaymentIntents created by the API include `metadata.userId` and `metadata.courseId` for server-side fulfillment.
+- Deploy the API behind a reverse proxy with TLS; `trust proxy` is enabled when `NODE_ENV=production`.
+- Health checks: `GET /health` (liveness) and `GET /health/ready` (MongoDB connection).
 
 ---
 

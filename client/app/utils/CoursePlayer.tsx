@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import axios from "axios";
+import { getPublicSocketUri } from "@/app/config/publicEnv";
 
 type Props = {
   videoUrl: string;
@@ -15,7 +16,7 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
   useEffect(() => {
     try {
       axios
-        .post(`${process.env.NEXT_PUBLIC_SOCKET_SERVER_URI}api/v1/getVdoCipherOTP`, {
+        .post(`${getPublicSocketUri()}api/v1/getVdoCipherOTP`, {
           videoId: videoUrl,
         })
         .then((res) => {

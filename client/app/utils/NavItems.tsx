@@ -1,43 +1,44 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { FC } from "react";
 
+export const navItemsData = [
+  { name: "Home", url: "/" },
+  { name: "Courses", url: "/courses" },
+  { name: "About", url: "/about" },
+  { name: "Policy", url: "/policy" },
+  { name: "FAQ", url: "/faq" },
+];
+
+function activeNavIndex(pathname: string | null): number {
+  if (!pathname) return -1;
+  if (pathname === "/") return 0;
+  for (let i = 1; i < navItemsData.length; i++) {
+    const u = navItemsData[i].url;
+    if (pathname === u || pathname.startsWith(`${u}/`)) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 interface Props {
-  activeItem: number;
   isMobile: boolean;
 }
 
-export const navItemsData = [
-  {
-    name: "Home",
-    url: "/",
-  },
-  {
-    name: "Courses",
-    url: "/courses",
-  },
-  {
-    name: "About",
-    url: "/about",
-  },
-  {
-    name: "Policy",
-    url: "/policy",
-  },
-  {
-    name: "FAQ",
-    url: "/faq",
-  },
-];
+const NavItems: FC<Props> = ({ isMobile }) => {
+  const pathname = usePathname();
+  const activeItem = activeNavIndex(pathname);
 
-const NavItems: FC<Props> = ({ activeItem, isMobile }) => {
   return (
     <>
-      {/* Desktop Navigation */}
       <div className="hidden lg:flex items-center space-x-1">
         {navItemsData.map((item, index) => (
-          <Link 
-            href={item.url} 
-            key={index}
+          <Link
+            href={item.url}
+            key={item.url}
             className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
               activeItem === index
                 ? "text-primary bg-primary/10"
@@ -52,13 +53,12 @@ const NavItems: FC<Props> = ({ activeItem, isMobile }) => {
         ))}
       </div>
 
-      {/* Mobile Navigation */}
       {isMobile && (
         <div className="space-y-2">
           {navItemsData.map((item, index) => (
-            <Link 
-              href={item.url} 
-              key={index}
+            <Link
+              href={item.url}
+              key={item.url}
               className={`block px-4 py-3 rounded-lg text-base font-medium transition-all duration-200 ${
                 activeItem === index
                   ? "text-primary bg-primary/10 border-l-2 border-primary"
