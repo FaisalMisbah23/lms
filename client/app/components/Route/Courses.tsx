@@ -31,7 +31,7 @@ const Courses = () => {
     ];
 
     return (
-        <section className="py-8 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <section className="py-8 bg-gradient-to-br from-background to-muted/30">
             <div className="container-responsive">
                 {/* Header Section */}
                 <div className="text-center mb-12 animate-fade-in">
@@ -40,7 +40,7 @@ const Courses = () => {
                         <span>Explore Our Courses</span>
                     </div>
                     
-                    <h2 className="heading-responsive font-bold text-balance mb-6 text-gray-900 dark:text-white">
+                    <h2 className="heading-responsive font-bold text-balance mb-6 text-foreground">
                         Expand Your Career{" "}
                         <span className="bg-gradient-to-r from-primary to-brand-600 bg-clip-text text-transparent">
                             Opportunity
@@ -48,7 +48,7 @@ const Courses = () => {
                     With Our Courses
                     </h2>
                     
-                    <p className="text-responsive text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-responsive text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                         Discover a world of knowledge with our comprehensive course library. 
                         From beginner to advanced, we have courses for every skill level and interest.
                     </p>
@@ -59,14 +59,14 @@ const Courses = () => {
                     {stats.map((stat, index) => (
                         <div 
                             key={index} 
-                            className="text-center p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover-lift"
+                            className="text-center p-6 bg-card rounded-xl border border-border shadow-sm hover-lift"
                             style={{ animationDelay: `${index * 0.1}s` }}
                         >
                             <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mx-auto mb-4">
                                 <stat.icon className="w-6 h-6 text-primary" />
                             </div>
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{stat.value}</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-300">{stat.label}</p>
+                            <p className="text-2xl font-bold text-foreground mb-2">{stat.value}</p>
+                            <p className="text-sm text-muted-foreground">{stat.label}</p>
                         </div>
                     ))}
                 </div>
@@ -75,12 +75,12 @@ const Courses = () => {
                 {isLoading ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {[...Array(8)].map((_, index) => (
-                            <div key={index} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 animate-pulse">
-                                <div className="w-full h-48 bg-gray-200 dark:bg-gray-700 rounded-lg mb-4"></div>
+                            <div key={index} className="bg-card rounded-xl border border-border p-6 animate-pulse">
+                                <div className="w-full h-48 bg-muted rounded-lg mb-4"></div>
                                 <div className="space-y-3">
-                                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-                                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                                    <div className="h-4 bg-muted rounded"></div>
+                                    <div className="h-3 bg-muted rounded w-3/4"></div>
+                                    <div className="h-3 bg-muted rounded w-1/2"></div>
                                 </div>
                             </div>
                         ))}
@@ -103,11 +103,11 @@ const Courses = () => {
                 {/* CTA Section */}
                 {courses && courses.length > 0 && (
                     <div className="text-center mt-12 animate-fade-in">
-                        <div className="bg-gradient-to-r from-primary/10 to-brand-600/10 rounded-2xl p-8 border border-primary/20 bg-white dark:bg-gray-800">
-                            <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+                        <div className="bg-card rounded-2xl p-8 border border-primary/20">
+                            <h3 className="text-2xl font-bold mb-4 text-foreground">
                                 Ready to Start Learning?
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+                            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                                 Join thousands of students who have already transformed their careers with our courses.
                             </p>
                             <button 

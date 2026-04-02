@@ -11,7 +11,7 @@ const ThemeSwitcher = () => {
 
   if (!mounted) {
     return (
-      <div className="w-9 h-9 rounded-lg bg-gray-200 dark:bg-gray-700 animate-pulse" />
+      <div className="w-9 h-9 rounded-lg bg-muted animate-pulse" />
     );
   }
 
@@ -22,7 +22,7 @@ const ThemeSwitcher = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="relative p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 border border-gray-200 dark:border-gray-700"
+      className="relative p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 border border-border"
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       title={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
     >

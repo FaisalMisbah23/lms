@@ -25,6 +25,7 @@ interface HeaderProps {
 }
 
 const Header: FC<HeaderProps> = ({ setOpen, open, route, setRoute }) => {
+  const currentYear = new Date().getFullYear();
   const pathname = usePathname();
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -146,6 +147,9 @@ const Header: FC<HeaderProps> = ({ setOpen, open, route, setRoute }) => {
               <button
                 onClick={() => setOpenSidebar(true)}
                 className="lg:hidden p-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+                aria-label="Open navigation menu"
+                aria-expanded={openSidebar}
+                aria-controls="mobile-navigation-sidebar"
               >
                 <HiOutlineMenuAlt3 size={24} />
               </button>
@@ -161,7 +165,7 @@ const Header: FC<HeaderProps> = ({ setOpen, open, route, setRoute }) => {
               id="screen"
             >
             <div className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
-            <div className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-card border-l border-border shadow-large">
+            <div id="mobile-navigation-sidebar" className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-card border-l border-border shadow-large">
               <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-border">
@@ -174,6 +178,7 @@ const Header: FC<HeaderProps> = ({ setOpen, open, route, setRoute }) => {
                   <button
                     onClick={() => setOpenSidebar(false)}
                     className="p-2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    aria-label="Close navigation menu"
                   >
                     <HiOutlineX size={24} />
                   </button>
@@ -223,7 +228,7 @@ const Header: FC<HeaderProps> = ({ setOpen, open, route, setRoute }) => {
                 {/* Footer */}
                 <div className="p-6 border-t border-border">
                   <p className="text-sm text-muted-foreground text-center">
-                    © 2024 ELearning. All rights reserved.
+                    © {currentYear} ELearning. All rights reserved.
                   </p>
                 </div>
                 </div>

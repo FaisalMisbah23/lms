@@ -88,10 +88,10 @@ const Verification: FC<Props> = ({ setRoute }) => {
         <div className="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-primary/10 rounded-full mb-3 sm:mb-4">
           <FiShield className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
           Verify Your Account
         </h1>
-        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
+        <p className="text-sm sm:text-base text-muted-foreground">
           We've sent a verification code to your email
         </p>
       </div>
@@ -106,7 +106,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
       {/* OTP Input Fields */}
       <div className="space-y-4 sm:space-y-6">
         <div className="text-center">
-          <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mb-4">
+          <p className="text-xs sm:text-sm text-muted-foreground mb-4">
             Enter the 4-digit code sent to your email
           </p>
         </div>
@@ -117,10 +117,17 @@ const Verification: FC<Props> = ({ setRoute }) => {
               key={key}
               type="text"
               ref={inputRefs[index]}
+              id={`verification-digit-${index + 1}`}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              autoComplete="one-time-code"
+              aria-label={`Verification digit ${index + 1}`}
+              aria-invalid={invalidError}
+              aria-describedby={invalidError ? "verification-error" : undefined}
               className={`w-12 h-12 sm:w-16 sm:h-16 text-center text-lg sm:text-xl font-bold border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 ${
                 invalidError
                   ? "border-red-500 bg-red-50 dark:bg-red-900/20 animate-shake"
-                  : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                  : "border-border bg-background text-foreground"
               }`}
               value={verifyNumber[key as keyof VerifyNumber]}
               onChange={(e) => handleInputChange(index, e.target.value)}
@@ -132,7 +139,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
 
         {invalidError && (
           <div className="text-center">
-            <p className="text-xs sm:text-sm text-red-600 dark:text-red-400">
+            <p id="verification-error" className="text-xs sm:text-sm text-red-600 dark:text-red-400">
               Please enter a valid 4-digit code
             </p>
           </div>
@@ -154,7 +161,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
         <button
           type="button"
           onClick={() => setRoute("Login")}
-          className="inline-flex items-center text-xs sm:text-sm text-gray-600 dark:text-gray-300 hover:text-primary transition-colors duration-200"
+          className="inline-flex items-center text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors duration-200"
         >
           <FiArrowLeft className="w-3 h-3 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
           Back to Sign in
@@ -163,7 +170,7 @@ const Verification: FC<Props> = ({ setRoute }) => {
 
       {/* Resend Code */}
       <div className="text-center mt-3 sm:mt-4">
-        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+        <p className="text-xs sm:text-sm text-muted-foreground">
           Didn't receive the code?{" "}
           <button
             type="button"

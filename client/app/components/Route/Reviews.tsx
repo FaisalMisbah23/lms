@@ -71,7 +71,7 @@ const Reviews = () => {
     ];
 
     return (
-        <section className="py-8 bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+        <section className="py-8 bg-gradient-to-br from-background to-muted/30">
             <div className="container-responsive">
                 {/* Header Section */}
                 <div className="text-center mb-12 animate-fade-in">
@@ -80,7 +80,7 @@ const Reviews = () => {
                         <span>Student Testimonials</span>
                 </div>
                     
-                    <h2 className="heading-responsive font-bold text-balance mb-6 text-gray-900 dark:text-white">
+                    <h2 className="heading-responsive font-bold text-balance mb-6 text-foreground">
                         Our Students Are{" "}
                         <span className="bg-gradient-to-r from-primary to-brand-600 bg-clip-text text-transparent">
                             Our Strength
@@ -89,7 +89,7 @@ const Reviews = () => {
                         See What They Say About Us
                     </h2>
                     
-                    <p className="text-responsive text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-responsive text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                         Discover why thousands of students choose ELearning for their learning journey. 
                         Our platform has helped countless individuals achieve their career goals and unlock their potential.
                     </p>
@@ -100,14 +100,14 @@ const Reviews = () => {
                     {stats.map((stat, index) => (
                         <div 
                             key={index} 
-                            className="text-center p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover-lift"
+                            className="text-center p-6 bg-card rounded-xl border border-border shadow-sm hover-lift"
                             style={{ animationDelay: `${index * 0.1}s` }}
                         >
                             <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mx-auto mb-4">
                                 <stat.icon className="w-6 h-6 text-primary" />
                             </div>
-                            <p className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{stat.value}</p>
-                            <p className="text-sm text-gray-600 dark:text-gray-300">{stat.label}</p>
+                            <p className="text-2xl font-bold text-foreground mb-2">{stat.value}</p>
+                            <p className="text-sm text-muted-foreground">{stat.label}</p>
                         </div>
                     ))}
                 </div>
@@ -130,10 +130,10 @@ const Reviews = () => {
                         <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                             <BsQuote className="w-8 h-8 text-primary" />
                         </div>
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                        <h3 className="text-xl font-semibold text-foreground mb-2">
                             No Reviews Yet
                         </h3>
-                        <p className="text-gray-600 dark:text-gray-300 mb-6">
+                        <p className="text-muted-foreground mb-6">
                             Be the first to leave a review after completing a course!
                         </p>
                     </div>
@@ -141,11 +141,11 @@ const Reviews = () => {
 
                 {/* CTA Section */}
                 <div className="text-center mt-12 animate-fade-in">
-                    <div className="bg-gradient-to-r from-primary/10 to-brand-600/10 rounded-2xl p-8 border border-primary/20 bg-white dark:bg-gray-800">
-                        <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+                    <div className="bg-card rounded-2xl p-8 border border-primary/20">
+                        <h3 className="text-2xl font-bold mb-4 text-foreground">
                             Ready to Join Our Community?
                         </h3>
-                        <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+                        <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
                             Start your learning journey today and become part of our growing community of successful students.
                         </p>
                         <button 

@@ -148,8 +148,9 @@ const Page = () => {
     const [courses, setCourses] = useState<any[]>([]);
     const [category, setCategory] = useState("All");
 
-    // Use dynamic data from API, fallback to static data if API fails or no data
-    const allCourses = data?.courses && data.courses.length > 0 ? data.courses : staticCourses;
+    // Only use static fallback if the courses API fails, not when API returns an empty set.
+    const shouldUseStaticFallback = Boolean(error);
+    const allCourses = shouldUseStaticFallback ? staticCourses : (data?.courses || []);
     const categories = categoriesData?.layout?.categories && categoriesData.layout.categories.length > 0 
         ? categoriesData.layout.categories 
         : staticCategories;
@@ -186,8 +187,8 @@ const Page = () => {
                         open={open}
                         setOpen={setOpen}
                     />
-            <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+                <div className="container-responsive py-16">
                         <Heading
                             title="All Courses | Elearning"
                             description="Elearning is a platform for students to learn and get help from teachers"
@@ -201,7 +202,7 @@ const Page = () => {
                             <span>Explore Our Courses</span>
                         </div>
                         
-                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+                        <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
                             Expand Your Career{" "}
                             <span className="bg-gradient-to-r from-primary to-brand-600 bg-clip-text text-transparent">
                                 Opportunity
@@ -209,24 +210,30 @@ const Page = () => {
                             With Our Courses
                         </h1>
                         
-                        <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+                        <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
                             Discover a world of knowledge with our comprehensive course library. 
                             From beginner to advanced, we have courses for every skill level and interest.
                         </p>
                     </div>
+
+                    {shouldUseStaticFallback && (
+                        <div className="mb-8 rounded-xl border border-amber-300/60 bg-amber-50 px-4 py-3 text-amber-900 dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-100">
+                            Showing demo courses because the live catalog is temporarily unavailable.
+                        </div>
+                    )}
 
                     {/* Stats Section */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
                         {stats.map((stat, index) => (
                             <div 
                                 key={index} 
-                                className="text-center p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover-lift"
+                                className="text-center p-6 bg-card rounded-xl border border-border shadow-sm hover-lift"
                             >
                                 <div className="flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mx-auto mb-4">
                                     <stat.icon className="w-6 h-6 text-primary" />
                                 </div>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{stat.value}</p>
-                                <p className="text-sm text-gray-600 dark:text-gray-300">{stat.label}</p>
+                                <p className="text-2xl font-bold text-foreground mb-2">{stat.value}</p>
+                                <p className="text-sm text-muted-foreground">{stat.label}</p>
                             </div>
                         ))}
                     </div>
@@ -237,7 +244,7 @@ const Page = () => {
                             className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
                                 category === "All" 
                                     ? "bg-primary text-primary-foreground shadow-lg" 
-                                    : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                                    : "bg-muted text-muted-foreground hover:bg-muted/80"
                             }`}
                             onClick={() => setCategory("All")}
                         >
@@ -249,7 +256,7 @@ const Page = () => {
                                 className={`px-6 py-3 rounded-full font-medium transition-all duration-200 ${
                                     category === item.title 
                                         ? "bg-primary text-primary-foreground shadow-lg" 
-                                        : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+                                        : "bg-muted text-muted-foreground hover:bg-muted/80"
                                 }`}
                                             onClick={() => setCategory(item.title)}
                                         >
@@ -264,10 +271,10 @@ const Page = () => {
                             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                                 <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                                     </div>
-                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                            <h3 className="text-xl font-semibold text-foreground mb-2">
                                 Loading Courses...
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-300">
+                            <p className="text-muted-foreground">
                                 Please wait while we fetch the latest courses
                             </p>
                         </div>
@@ -279,10 +286,10 @@ const Page = () => {
                             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                                 <FiBookOpen className="w-8 h-8 text-primary" />
                             </div>
-                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                            <h3 className="text-xl font-semibold text-foreground mb-2">
                                 {search ? "No courses found!" : "No courses found in this category"}
                             </h3>
-                            <p className="text-gray-600 dark:text-gray-300">
+                            <p className="text-muted-foreground">
                                 {search ? "Try a different search term" : "Please try another category"}
                             </p>
                         </div>

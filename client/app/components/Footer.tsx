@@ -3,6 +3,7 @@ import React from "react";
 import { FiMail, FiPhone, FiMapPin, FiYoutube, FiInstagram, FiGithub, FiTwitter, FiLinkedin } from "react-icons/fi";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
   const footerLinks = {
     company: [
       { name: "About Us", href: "/about" },
@@ -32,7 +33,7 @@ const Footer = () => {
   ];
 
     return (
-    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800">
+    <footer className="bg-card border-t border-border">
       <div className="container-responsive py-16">
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
@@ -46,7 +47,7 @@ const Footer = () => {
                 Learning
               </span>
                                 </Link>
-            <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+            <p className="text-muted-foreground mb-6 leading-relaxed">
               Transform your future with expert-led learning. Join thousands of students worldwide in our comprehensive learning platform.
             </p>
             
@@ -56,7 +57,7 @@ const Footer = () => {
                                 <Link
                   key={social.name}
                   href={social.href}
-                  className="w-10 h-10 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200"
+                  className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/80 transition-all duration-200"
                   aria-label={social.name}
                 >
                   <social.icon size={18} />
@@ -67,13 +68,13 @@ const Footer = () => {
 
           {/* Company Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Company</h3>
+            <h3 className="text-lg font-semibold mb-6 text-foreground">Company</h3>
             <ul className="space-y-4">
               {footerLinks.company.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -84,13 +85,13 @@ const Footer = () => {
 
           {/* Resources Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Resources</h3>
+            <h3 className="text-lg font-semibold mb-6 text-foreground">Resources</h3>
                         <ul className="space-y-4">
               {footerLinks.resources.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -101,13 +102,13 @@ const Footer = () => {
 
           {/* Support Links */}
           <div>
-            <h3 className="text-lg font-semibold mb-6 text-gray-900 dark:text-white">Support</h3>
+            <h3 className="text-lg font-semibold mb-6 text-foreground">Support</h3>
                         <ul className="space-y-4">
               {footerLinks.support.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                   >
                     {link.name}
                   </Link>
@@ -118,18 +119,18 @@ const Footer = () => {
                     </div>
 
         {/* Contact Section */}
-        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+        <div className="mt-12 pt-8 border-t border-border">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {contactInfo.map((contact, index) => (
               <Link
                 key={index}
                 href={contact.href}
-                className="flex items-center space-x-3 p-4 rounded-lg bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 group"
+                className="flex items-center space-x-3 p-4 rounded-lg bg-muted hover:bg-muted/80 transition-all duration-200 group"
               >
                 <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center group-hover:bg-primary/20 transition-colors duration-200">
                   <contact.icon className="w-5 h-5 text-primary" />
                 </div>
-                <span className="text-sm text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">
+                <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors duration-200">
                   {contact.text}
                 </span>
               </Link>
@@ -138,13 +139,13 @@ const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-gray-200 dark:border-gray-800">
+        <div className="mt-12 pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-sm text-gray-600 dark:text-gray-300 text-center md:text-left">
-              © 2024 ELearning. All rights reserved.
+            <p className="text-sm text-muted-foreground text-center md:text-left">
+              © {currentYear} ELearning. All rights reserved.
             </p>
-            <div className="flex items-center space-x-6 text-sm text-gray-600 dark:text-gray-300">
-              <Link href="/policy" className="hover:text-gray-900 dark:hover:text-white transition-colors duration-200">
+            <div className="flex items-center space-x-6 text-sm text-muted-foreground">
+              <Link href="/policy" className="hover:text-foreground transition-colors duration-200">
                 Privacy & policy
               </Link>
             </div>

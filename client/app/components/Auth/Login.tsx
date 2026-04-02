@@ -74,7 +74,7 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
       <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         {/* Email Field */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="login-email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Email Address
           </label>
           <div className="relative">
@@ -82,11 +82,14 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
               <FiMail className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
             </div>
             <input
+              id="login-email"
               type="email"
               name="email"
               value={values.email}
               onChange={handleChange}
               placeholder="Enter your email"
+              aria-invalid={Boolean(errors.email && touched.email)}
+              aria-describedby={errors.email && touched.email ? "login-email-error" : undefined}
               className={`w-full pl-9 sm:pl-10 pr-4 py-2.5 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 ${
                 errors.email && touched.email
                   ? "border-red-500 bg-red-50 dark:bg-red-900/20"
@@ -95,13 +98,13 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
             />
           </div>
           {errors.email && touched.email && (
-            <p className="text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.email}</p>
+            <p id="login-email-error" className="text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.email}</p>
           )}
         </div>
 
         {/* Password Field */}
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <label htmlFor="login-password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             Password
           </label>
           <div className="relative">
@@ -109,11 +112,14 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
               <FiLock className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" />
             </div>
             <input
+              id="login-password"
               type={!show ? "password" : "text"}
               name="password"
               value={values.password}
               onChange={handleChange}
               placeholder="Enter your password"
+              aria-invalid={Boolean(errors.password && touched.password)}
+              aria-describedby={errors.password && touched.password ? "login-password-error" : undefined}
               className={`w-full pl-9 sm:pl-10 pr-10 sm:pr-12 py-2.5 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 ${
                 errors.password && touched.password
                   ? "border-red-500 bg-red-50 dark:bg-red-900/20"
@@ -124,6 +130,7 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
               type="button"
               className="absolute inset-y-0 right-0 pr-3 flex items-center"
               onClick={() => setShow(!show)}
+              aria-label={show ? "Hide password" : "Show password"}
             >
               {!show ? (
                 <AiOutlineEyeInvisible className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400 hover:text-gray-600" />
@@ -133,7 +140,7 @@ const Login: FC<Props> = ({ setRoute, setOpen, refetch }) => {
             </button>
           </div>
           {errors.password && touched.password && (
-            <p className="text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.password}</p>
+            <p id="login-password-error" className="text-xs sm:text-sm text-red-600 dark:text-red-400">{errors.password}</p>
           )}
         </div>
 
