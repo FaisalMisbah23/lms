@@ -114,12 +114,19 @@ export const getSingleCourse = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const courseId = req.params.id;
-      const isCached = await redis.get(courseId);
       let course;
-      if (isCached !== null) {
-        course = JSON.parse(isCached);
-      } else {
-        const course = await Course.findById(courseId).select(
+
+      try {
+        const isCached = await redis.get(courseId);
+        if (isCached !== null) {
+          course = JSON.parse(isCached);
+        }
+      } catch (cacheError) {
+        console.warn("Redis read failed for getSingleCourse:", cacheError);
+      }
+
+      if (!course) {
+        course = await Course.findById(courseId).select(
           "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
         );
 
@@ -127,12 +134,16 @@ export const getSingleCourse = CatchAsyncError(
           return next(new ErrorHandler("Course not found", 404));
         }
 
-        await redis.set(
-          courseId,
-          JSON.stringify(course),
-          "EX",
-          7 * 24 * 60 * 60
-        );
+        try {
+          await redis.set(
+            courseId,
+            JSON.stringify(course),
+            "EX",
+            7 * 24 * 60 * 60
+          );
+        } catch (cacheError) {
+          console.warn("Redis write failed for getSingleCourse:", cacheError);
+        }
       }
 
       res.status(200).json({
@@ -149,16 +160,27 @@ export const getSingleCourse = CatchAsyncError(
 export const getAllCourses = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const isCached = await redis.get("allCourses");
       let courses;
-      if (isCached) {
-        courses = JSON.parse(isCached);
-      } else {
+
+      try {
+        const isCached = await redis.get("allCourses");
+        if (isCached) {
+          courses = JSON.parse(isCached);
+        }
+      } catch (cacheError) {
+        console.warn("Redis read failed for getAllCourses:", cacheError);
+      }
+
+      if (!courses) {
         courses = await Course.find().select(
           "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
         );
 
-        await redis.set("allCourses", JSON.stringify(courses));
+        try {
+          await redis.set("allCourses", JSON.stringify(courses));
+        } catch (cacheError) {
+          console.warn("Redis write failed for getAllCourses:", cacheError);
+        }
       }
 
       res.status(200).json({

@@ -97,17 +97,27 @@ exports.editCourse = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) =>
 exports.getSingleCourse = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const courseId = req.params.id;
-        const isCached = yield redis_1.redis.get(courseId);
         let course;
-        if (isCached !== null) {
-            course = JSON.parse(isCached);
+        try {
+            const isCached = yield redis_1.redis.get(courseId);
+            if (isCached !== null) {
+                course = JSON.parse(isCached);
+            }
         }
-        else {
-            const course = yield course_model_1.default.findById(courseId).select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
+        catch (cacheError) {
+            console.warn("Redis read failed for getSingleCourse:", cacheError);
+        }
+        if (!course) {
+            course = yield course_model_1.default.findById(courseId).select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
             if (!course) {
                 return next(new ErrorHandler_1.default("Course not found", 404));
             }
-            yield redis_1.redis.set(courseId, JSON.stringify(course), "EX", 7 * 24 * 60 * 60);
+            try {
+                yield redis_1.redis.set(courseId, JSON.stringify(course), "EX", 7 * 24 * 60 * 60);
+            }
+            catch (cacheError) {
+                console.warn("Redis write failed for getSingleCourse:", cacheError);
+            }
         }
         res.status(200).json({
             success: true,
@@ -121,14 +131,24 @@ exports.getSingleCourse = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, nex
 // get all courses without purchasing
 exports.getAllCourses = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const isCached = yield redis_1.redis.get("allCourses");
         let courses;
-        if (isCached) {
-            courses = JSON.parse(isCached);
+        try {
+            const isCached = yield redis_1.redis.get("allCourses");
+            if (isCached) {
+                courses = JSON.parse(isCached);
+            }
         }
-        else {
+        catch (cacheError) {
+            console.warn("Redis read failed for getAllCourses:", cacheError);
+        }
+        if (!courses) {
             courses = yield course_model_1.default.find().select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
-            yield redis_1.redis.set("allCourses", JSON.stringify(courses));
+            try {
+                yield redis_1.redis.set("allCourses", JSON.stringify(courses));
+            }
+            catch (cacheError) {
+                console.warn("Redis write failed for getAllCourses:", cacheError);
+            }
         }
         res.status(200).json({
             success: true,
