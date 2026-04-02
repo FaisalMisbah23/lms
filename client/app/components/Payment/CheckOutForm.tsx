@@ -1,5 +1,6 @@
 import { styles } from "@/app/style/style";
 import { useCreateOrderMutation } from "@/redux/features/orders/ordersApi";
+import type { PaymentIntent } from "@stripe/stripe-js";
 import {
     LinkAuthenticationElement,
     PaymentElement,
@@ -16,10 +17,11 @@ type Props = {
     data: any;
     user: any;
     refetch: any;
+    clientSecret: string;
 };
 
 // from: https://github.com/stripe-samples/accept-a-payment/blob/main/payment-element/client/react-cra/src/CheckoutForm.jsx
-const CheckOutForm = ({ data, user }: Props) => {
+const CheckOutForm = ({ data, user, refetch, clientSecret }: Props) => {
     const stripe = useStripe();
     const elements = useElements();
     const [message, setMessage] = useState<any>("");
@@ -52,10 +54,9 @@ const CheckOutForm = ({ data, user }: Props) => {
         }
 
         // Fallback logic
-        let finalPaymentIntent = paymentIntent;
+        let finalPaymentIntent: PaymentIntent | null = paymentIntent ?? null;
 
         if (!paymentIntent || paymentIntent.status !== "succeeded") {
-            const clientSecret = elements._clientSecret;
             if (!clientSecret) {
                 toast.dismiss();
                 toast.error("Something went wrong. Please refresh and try again.");
@@ -64,7 +65,7 @@ const CheckOutForm = ({ data, user }: Props) => {
             }
 
             const result = await stripe.retrievePaymentIntent(clientSecret);
-            finalPaymentIntent = result.paymentIntent;
+            finalPaymentIntent = result.paymentIntent ?? null;
         }
 
         // Final success condition

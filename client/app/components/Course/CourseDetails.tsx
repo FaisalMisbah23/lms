@@ -380,6 +380,7 @@ const CourseDetails = ({
                                             data={data}
                                             user={user}
                                             refetch={refetch}
+                                            clientSecret={clientSecret}
                                         />
                                     </Elements>
                                 )}
