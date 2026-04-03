@@ -17,13 +17,44 @@ const user_model_1 = __importDefault(require("../models/user.model"));
 const redis_1 = require("../utils/redis");
 // get user by id
 const getUserById = (id, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userJson = yield redis_1.redis.get(id);
+    let userJson;
+    try {
+        userJson = yield redis_1.redis.get(id);
+    }
+    catch (cacheError) {
+        console.warn("Redis read failed in getUserById:", cacheError);
+    }
     if (userJson) {
         const user = JSON.parse(userJson);
         res.status(201).json({
             success: true,
             user,
         });
+    }
+    else {
+        try {
+            const user = yield user_model_1.default.findById(id);
+            if (user) {
+                res.status(201).json({
+                    success: true,
+                    user,
+                });
+                redis_1.redis.set(id, JSON.stringify(user)).catch((e) => console.warn("Redis write failed in getUserById:", e));
+            }
+            else {
+                res.status(404).json({
+                    success: false,
+                    message: "User not found",
+                });
+            }
+        }
+        catch (error) {
+            console.warn("Database fallback failed in getUserById:", error);
+            res.status(500).json({
+                success: false,
+                message: (error === null || error === void 0 ? void 0 : error.message) || "Failed to retrieve user",
+            });
+        }
     }
 });
 exports.getUserById = getUserById;

@@ -25,12 +25,33 @@ export const isAuthenticated = CatchAsyncError(
       return next(new ErrorHandler("Access token is not valid!", 400));
     }
 
-    const user = await redis.get(decoded.id);
+    let user;
+    try {
+      user = await redis.get(decoded.id);
+    } catch (cacheError) {
+      console.warn("Redis read failed in isAuthenticated:", cacheError);
+    }
 
     if (!user) {
-      return next(
-        new ErrorHandler("Please login to access this resource!", 400)
-      );
+      try {
+        const User = (await import("../models/user.model")).default;
+        const dbUser = await User.findById(decoded.id);
+        if (!dbUser) {
+          return next(
+            new ErrorHandler("Please login to access this resource!", 400)
+          );
+        }
+        req.user = dbUser.toObject();
+        redis.set(decoded.id, JSON.stringify(dbUser), "EX", 7 * 24 * 60 * 60).catch((e) =>
+          console.warn("Redis write failed in isAuthenticated:", e)
+        );
+        return next();
+      } catch (error) {
+        console.warn("Database fallback failed in isAuthenticated:", error);
+        return next(
+          new ErrorHandler("Please login to access this resource!", 400)
+        );
+      }
     }
 
     req.user = JSON.parse(user);

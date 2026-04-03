@@ -5,7 +5,12 @@ import ErrorHandler from "../utils/ErrorHandler";
 
 // get user by id
 export const getUserById = async (id: string, res: Response) => {
-  const userJson = await redis.get(id);
+  let userJson;
+  try {
+    userJson = await redis.get(id);
+  } catch (cacheError) {
+    console.warn("Redis read failed in getUserById:", cacheError);
+  }
 
   if (userJson) {
     const user = JSON.parse(userJson);
@@ -13,6 +18,30 @@ export const getUserById = async (id: string, res: Response) => {
       success: true,
       user,
     });
+  } else {
+    try {
+      const user = await User.findById(id);
+      if (user) {
+        res.status(201).json({
+          success: true,
+          user,
+        });
+        redis.set(id, JSON.stringify(user)).catch((e) =>
+          console.warn("Redis write failed in getUserById:", e)
+        );
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+    } catch (error: any) {
+      console.warn("Database fallback failed in getUserById:", error);
+      res.status(500).json({
+        success: false,
+        message: error?.message || "Failed to retrieve user",
+      });
+    }
   }
 };
 
