@@ -41,9 +41,18 @@ exports.uploadCourse = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) 
                 url: myCloud.url,
             };
         }
-        let courses = yield course_model_1.default.find().select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
-        yield redis_1.redis.set("allCourses", JSON.stringify(courses));
-        (0, course_service_1.createCourse)(data, res, next);
+        const course = yield course_model_1.default.create(data);
+        const courses = yield course_model_1.default.find().select("-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links");
+        try {
+            yield redis_1.redis.set("allCourses", JSON.stringify(courses));
+        }
+        catch (cacheError) {
+            console.warn("Redis write failed for uploadCourse:", cacheError);
+        }
+        res.status(201).json({
+            success: true,
+            course,
+        });
     }
     catch (error) {
         return next(new ErrorHandler_1.default(error.message, 400));

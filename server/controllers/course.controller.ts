@@ -7,7 +7,7 @@ import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import { redis } from "../utils/redis";
 import cloudinary from "cloudinary";
-import { createCourse, getAllCoursesService } from "../services/course.service";
+import { getAllCoursesService } from "../services/course.service";
 import Course from "../models/course.model";
 import mongoose, { isValidObjectId } from "mongoose";
 import Notification from "../models/notification.model";
@@ -32,13 +32,22 @@ export const uploadCourse = CatchAsyncError(
         };
       }
 
-      let courses = await Course.find().select(
+      const course = await Course.create(data);
+
+      const courses = await Course.find().select(
         "-courseData.videoUrl -courseData.suggestion -courseData.questions -courseData.links"
       );
 
-      await redis.set("allCourses", JSON.stringify(courses));
+      try {
+        await redis.set("allCourses", JSON.stringify(courses));
+      } catch (cacheError) {
+        console.warn("Redis write failed for uploadCourse:", cacheError);
+      }
 
-      createCourse(data, res, next);
+      res.status(201).json({
+        success: true,
+        course,
+      });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 400));
     }
