@@ -4,8 +4,6 @@ import ErrorHandler from "../utils/ErrorHandler";
 import User, { IUser } from "../models/user.model";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import dotenv from "dotenv";
-import path from "path";
-import ejs from "ejs";
 import sendMail from "../utils/sendMail";
 import {
   accessTokenOptions,
@@ -35,6 +33,11 @@ export const registerUser = CatchAsyncError(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { name, email, password } = req.body;
+
+      if (!name || !email || !password) {
+        return next(new ErrorHandler("Name, email, and password are required.", 400));
+      }
+
       const isEmailExist = await User.findOne({ email });
       if (isEmailExist) {
         return next(new ErrorHandler("Email already exists!", 400));
@@ -44,13 +47,10 @@ export const registerUser = CatchAsyncError(
         email,
         password,
       };
+
       const activationToken = createActivationToken(user);
       const activationCode = activationToken.activationCode;
       const data = { user: { name: user.name }, activationCode };
-      const html = await ejs.renderFile(
-        path.join(__dirname, "../mails/activation-mail.ejs"),
-        data
-      );
 
       try {
         await sendMail({
@@ -66,10 +66,16 @@ export const registerUser = CatchAsyncError(
           activationToken: activationToken.token,
         });
       } catch (error: any) {
-        return next(new ErrorHandler(error.message, 400));
+        console.error("Registration email delivery failed:", error?.message || error);
+        return next(
+          new ErrorHandler(
+            "Registration is temporarily unavailable because the email service is not configured correctly. Please try again later.",
+            503
+          )
+        );
       }
     } catch (error: any) {
-      return next(new ErrorHandler(error, 400));
+      return next(new ErrorHandler(error?.message || "Registration failed.", 400));
     }
   }
 );

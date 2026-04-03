@@ -18,8 +18,6 @@ const ErrorHandler_1 = __importDefault(require("../utils/ErrorHandler"));
 const user_model_1 = __importDefault(require("../models/user.model"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const path_1 = __importDefault(require("path"));
-const ejs_1 = __importDefault(require("ejs"));
 const sendMail_1 = __importDefault(require("../utils/sendMail"));
 const jwt_1 = require("../utils/jwt");
 const redis_1 = require("../utils/redis");
@@ -30,6 +28,9 @@ dotenv_1.default.config();
 exports.registerUser = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { name, email, password } = req.body;
+        if (!name || !email || !password) {
+            return next(new ErrorHandler_1.default("Name, email, and password are required.", 400));
+        }
         const isEmailExist = yield user_model_1.default.findOne({ email });
         if (isEmailExist) {
             return next(new ErrorHandler_1.default("Email already exists!", 400));
@@ -42,7 +43,6 @@ exports.registerUser = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) 
         const activationToken = (0, exports.createActivationToken)(user);
         const activationCode = activationToken.activationCode;
         const data = { user: { name: user.name }, activationCode };
-        const html = yield ejs_1.default.renderFile(path_1.default.join(__dirname, "../mails/activation-mail.ejs"), data);
         try {
             yield (0, sendMail_1.default)({
                 email: user.email,
@@ -57,11 +57,12 @@ exports.registerUser = (0, catchAsyncErrors_1.CatchAsyncError)((req, res, next) 
             });
         }
         catch (error) {
-            return next(new ErrorHandler_1.default(error.message, 400));
+            console.error("Registration email delivery failed:", (error === null || error === void 0 ? void 0 : error.message) || error);
+            return next(new ErrorHandler_1.default("Registration is temporarily unavailable because the email service is not configured correctly. Please try again later.", 503));
         }
     }
     catch (error) {
-        return next(new ErrorHandler_1.default(error, 400));
+        return next(new ErrorHandler_1.default((error === null || error === void 0 ? void 0 : error.message) || "Registration failed.", 400));
     }
 }));
 const createActivationToken = (user) => {
