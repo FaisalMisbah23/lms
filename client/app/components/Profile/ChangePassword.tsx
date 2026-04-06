@@ -47,10 +47,10 @@ const ChangePassword: FC = () => {
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                <h2 className="text-2xl font-bold text-foreground mb-2">
                     Change Password
                 </h2>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-muted-foreground">
                     Update your password to keep your account secure
                 </p>
             </div>
@@ -58,19 +58,19 @@ const ChangePassword: FC = () => {
             <form onSubmit={passwordChangeHandler} className="space-y-6">
                 {/* Current Password */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-foreground">
                         Current Password
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FiLock className="h-5 w-5 text-gray-400" />
+                            <FiLock className="h-5 w-5 text-muted-foreground" />
                         </div>
                         <input
                             type={showOldPassword ? "text" : "password"}
                             value={oldPassword}
                             onChange={(e) => setOldPassword(e.target.value)}
                             placeholder="Enter your current password"
-                            className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                            className="w-full pl-10 pr-12 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 bg-background text-foreground"
                         />
                         <button
                             type="button"
@@ -78,9 +78,9 @@ const ChangePassword: FC = () => {
                             onClick={() => setShowOldPassword(!showOldPassword)}
                         >
                             {showOldPassword ? (
-                                <FiEyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                <FiEyeOff className="h-5 w-5 text-muted-foreground hover:text-foreground" />
                             ) : (
-                                <FiEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                <FiEye className="h-5 w-5 text-muted-foreground hover:text-foreground" />
                             )}
                         </button>
                     </div>
@@ -88,19 +88,19 @@ const ChangePassword: FC = () => {
 
                 {/* New Password */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-foreground">
                         New Password
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FiLock className="h-5 w-5 text-gray-400" />
+                            <FiLock className="h-5 w-5 text-muted-foreground" />
                         </div>
                         <input
                             type={showNewPassword ? "text" : "password"}
                             value={newPassword}
                             onChange={(e) => setNewPassword(e.target.value)}
                             placeholder="Enter your new password"
-                            className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                            className="w-full pl-10 pr-12 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 bg-background text-foreground"
                         />
                         <button
                             type="button"
@@ -108,32 +108,32 @@ const ChangePassword: FC = () => {
                             onClick={() => setShowNewPassword(!showNewPassword)}
                         >
                             {showNewPassword ? (
-                                <FiEyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                <FiEyeOff className="h-5 w-5 text-muted-foreground hover:text-foreground" />
                             ) : (
-                                <FiEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                <FiEye className="h-5 w-5 text-muted-foreground hover:text-foreground" />
                             )}
                         </button>
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-muted-foreground">
                         Password must be at least 6 characters long
                     </p>
                 </div>
 
                 {/* Confirm New Password */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-foreground">
                         Confirm New Password
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FiLock className="h-5 w-5 text-gray-400" />
+                            <FiLock className="h-5 w-5 text-muted-foreground" />
                         </div>
                         <input
                             type={showConfirmPassword ? "text" : "password"}
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             placeholder="Confirm your new password"
-                            className="w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                            className="w-full pl-10 pr-12 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 bg-background text-foreground"
                         />
                         <button
                             type="button"
@@ -141,9 +141,9 @@ const ChangePassword: FC = () => {
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         >
                             {showConfirmPassword ? (
-                                <FiEyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                <FiEyeOff className="h-5 w-5 text-muted-foreground hover:text-foreground" />
                             ) : (
-                                <FiEye className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                                <FiEye className="h-5 w-5 text-muted-foreground hover:text-foreground" />
                             )}
                         </button>
                     </div>

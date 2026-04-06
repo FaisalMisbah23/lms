@@ -1,7 +1,6 @@
 "use client"
 
-import { FC, useState } from "react"
-import { styles } from "../../style/style"
+import { FC } from "react"
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice"
 import { useUpdateAvatarMutation } from "@/redux/features/user/userApi"
 import { useSession } from "next-auth/react"
@@ -43,11 +42,11 @@ const SideBarProfile: FC<Props> = ({
     }
 
     return (
-        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+        <div className="bg-card rounded-xl border border-border shadow-soft p-6">
             {/* User Info */}
             <div className="text-center mb-6">
                 <div className="relative inline-block mb-4">
-                    <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-gray-200 dark:border-gray-600">
+                    <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-border">
                         <img
                             src={
                                 userData?.user?.avatar?.url ||
@@ -70,10 +69,10 @@ const SideBarProfile: FC<Props> = ({
                         accept="image/png,image/jpg,image/jpeg,image/webp"
                     />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-1">
+                <h3 className="text-xl font-semibold text-foreground mb-1">
                     {userData?.user?.name || user?.name}
                 </h3>
-                <p className="text-gray-600 dark:text-gray-300 text-sm">
+                <p className="text-muted-foreground text-sm">
                     {userData?.user?.email || user?.email}
                 </p>
             </div>
@@ -84,7 +83,7 @@ const SideBarProfile: FC<Props> = ({
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
                         active === 1
                             ? "bg-primary text-primary-foreground shadow-sm"
-                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            : "text-foreground/90 hover:bg-muted"
                     }`}
                 onClick={() => setActive(1)}
             >
@@ -96,7 +95,7 @@ const SideBarProfile: FC<Props> = ({
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
                         active === 2
                             ? "bg-primary text-primary-foreground shadow-sm"
-                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            : "text-foreground/90 hover:bg-muted"
                     }`}
                 onClick={() => setActive(2)}
             >
@@ -108,7 +107,7 @@ const SideBarProfile: FC<Props> = ({
                     className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 ${
                         active === 3
                             ? "bg-primary text-primary-foreground shadow-sm"
-                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            : "text-foreground/90 hover:bg-muted"
                     }`}
                 onClick={() => setActive(3)}
             >
@@ -120,7 +119,7 @@ const SideBarProfile: FC<Props> = ({
                 {(userData?.user?.role === "admin" || user?.role === "admin") && (
                     <Link
                         href="/admin"
-                        className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                        className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200 text-foreground/90 hover:bg-muted"
                     >
                         <FiSettings className="w-5 h-5" />
                         <span className="font-medium">Admin Dashboard</span>
@@ -129,7 +128,7 @@ const SideBarProfile: FC<Props> = ({
             </div>
 
             {/* Logout Button */}
-            <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <div className="mt-6 pt-6 border-t border-border">
                 <button
                     className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
                     onClick={logOutHandler}

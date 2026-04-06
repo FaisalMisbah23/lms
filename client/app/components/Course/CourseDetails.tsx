@@ -54,8 +54,8 @@ const CourseDetails = ({
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="w-full">
+            <div className="container-responsive py-8">
                 {/* Course Header */}
                 <div className="mb-8">
                     <div className="flex items-center space-x-2 mb-4">
@@ -63,67 +63,67 @@ const CourseDetails = ({
                             <FiBookOpen className="w-4 h-4" />
                             <span>{data.category}</span>
                         </div>
-                        <div className="inline-flex items-center space-x-2 px-3 py-1 bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 rounded-full text-sm font-medium">
-                            <FiAward className="w-4 h-4" />
+                        <div className="inline-flex items-center space-x-2 px-3 py-1 bg-muted text-foreground rounded-full text-sm font-medium border border-border">
+                            <FiAward className="w-4 h-4 text-primary" />
                             <span>{data.level}</span>
                         </div>
                     </div>
                     
-                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight">
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4 leading-tight">
                             {data.name}
                         </h1>
                     
-                    <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-6 max-w-4xl">
+                    <p className="text-lg sm:text-xl text-muted-foreground mb-6 max-w-4xl">
                         {data.description}
                     </p>
 
                     {/* Course Stats */}
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                        <div className="flex items-center space-x-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center space-x-3 p-4 bg-card rounded-xl border border-border shadow-soft">
                             <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
                                 <FiStar className="w-5 h-5 text-primary" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                <p className="text-2xl font-bold text-foreground">
                                     {typeof data?.ratings === "number" ? data.ratings.toFixed(1) : "0.0"}
                                 </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-300">Rating</p>
+                                <p className="text-sm text-muted-foreground">Rating</p>
                             </div>
                         </div>
                         
-                        <div className="flex items-center space-x-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center space-x-3 p-4 bg-card rounded-xl border border-border shadow-soft">
                             <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
                                 <FiUsers className="w-5 h-5 text-primary" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                <p className="text-2xl font-bold text-foreground">
                                     {data.purchased}
                                 </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-300">Students</p>
+                                <p className="text-sm text-muted-foreground">Students</p>
                             </div>
                         </div>
                         
-                        <div className="flex items-center space-x-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center space-x-3 p-4 bg-card rounded-xl border border-border shadow-soft">
                             <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
                                 <FiPlay className="w-5 h-5 text-primary" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                <p className="text-2xl font-bold text-foreground">
                                     {data.totalVideos}
                                 </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-300">Lessons</p>
+                                <p className="text-sm text-muted-foreground">Lessons</p>
                             </div>
                         </div>
 
-                        <div className="flex items-center space-x-3 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center space-x-3 p-4 bg-card rounded-xl border border-border shadow-soft">
                             <div className="flex items-center justify-center w-10 h-10 bg-primary/10 rounded-lg">
                                 <FiClock className="w-5 h-5 text-primary" />
                             </div>
                             <div>
-                                <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                                <p className="text-2xl font-bold text-foreground">
                                     {data.reviews?.length || 0}
                                 </p>
-                                <p className="text-sm text-gray-600 dark:text-gray-300">Reviews</p>
+                                <p className="text-sm text-muted-foreground">Reviews</p>
                             </div>
                         </div>
                     </div>
@@ -133,8 +133,8 @@ const CourseDetails = ({
                     {/* Main Content */}
                     <div className="lg:col-span-2 space-y-8">
                         {/* What You'll Learn */}
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                        <div className="bg-card rounded-xl border border-border shadow-soft p-6">
+                            <h2 className="text-2xl font-bold text-foreground mb-6">
                             What you will learn from this course?
                             </h2>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -146,7 +146,7 @@ const CourseDetails = ({
                                                 className="text-green-500"
                                         />
                                     </div>
-                                        <p className="text-gray-700 dark:text-gray-300">
+                                        <p className="text-foreground/90">
                                         {item.title}
                                     </p>
                                 </div>
@@ -155,8 +155,8 @@ const CourseDetails = ({
                         </div>
 
                         {/* Prerequisites */}
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                        <div className="bg-card rounded-xl border border-border shadow-soft p-6">
+                            <h2 className="text-2xl font-bold text-foreground mb-6">
                             What are the prerequisites for starting this course?
                             </h2>
                             <div className="space-y-4">
@@ -168,7 +168,7 @@ const CourseDetails = ({
                                                 className="text-green-500"
                                     />
                                 </div>
-                                        <p className="text-gray-700 dark:text-gray-300">
+                                        <p className="text-foreground/90">
                                             {item.title}
                                         </p>
                                     </div>
@@ -177,35 +177,35 @@ const CourseDetails = ({
                         </div>
 
                         {/* Course Overview */}
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                        <div className="bg-card rounded-xl border border-border shadow-soft p-6">
+                            <h2 className="text-2xl font-bold text-foreground mb-6">
                                 Course Overview
                             </h2>
                             <CourseContentList isDemo={true} data={data?.courseData} />
                         </div>
 
                         {/* Course Details */}
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                        <div className="bg-card rounded-xl border border-border shadow-soft p-6">
+                            <h2 className="text-2xl font-bold text-foreground mb-6">
                                 Course Details
                             </h2>
-                            <div className="prose prose-gray dark:prose-invert max-w-none">
-                                <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-line">
+                            <div className="max-w-none">
+                                <p className="text-foreground/90 leading-relaxed whitespace-pre-line">
                                 {data.description}
                             </p>
                             </div>
                         </div>
 
                         {/* Reviews Section */}
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                        <div className="bg-card rounded-xl border border-border shadow-soft p-6">
                             <div className="flex items-center justify-between mb-6">
                                 <div className="flex items-center space-x-4">
                                 <Ratings rating={data?.ratings} />
                                     <div>
-                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                                        <h2 className="text-2xl font-bold text-foreground">
                                             {typeof data?.ratings === "number" ? data.ratings.toFixed(1) : "0.0"} Course Rating
                                         </h2>
-                                        <p className="text-gray-600 dark:text-gray-300">
+                                        <p className="text-muted-foreground">
                                             {data?.reviews?.length || 0} Reviews
                                         </p>
                                     </div>
@@ -215,7 +215,7 @@ const CourseDetails = ({
                             <div className="space-y-6">
                             {(data?.reviews && [...data.reviews].reverse()).map(
                                 (item: any, index: number) => (
-                                        <div key={index} className="border-b border-gray-200 dark:border-gray-700 pb-6 last:border-b-0">
+                                        <div key={index} className="border-b border-border pb-6 last:border-b-0">
                                             <div className="flex items-start space-x-4">
                                                 <div className="flex-shrink-0">
                                                 <Image
@@ -232,15 +232,15 @@ const CourseDetails = ({
                                             </div>
                                                 <div className="flex-1">
                                                     <div className="flex items-center space-x-2 mb-2">
-                                                        <h5 className="font-semibold text-gray-900 dark:text-white">
+                                                        <h5 className="font-semibold text-foreground">
                                                         {item.user.name}
                                                     </h5>
                                                     <Ratings rating={item.rating} />
                                                 </div>
-                                                    <p className="text-gray-700 dark:text-gray-300 mb-2">
+                                                    <p className="text-foreground/90 mb-2">
                                                     {item.comment}
                                                 </p>
-                                                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                    <p className="text-sm text-muted-foreground">
                                                         {format(item.createdAt)}
                                                     </p>
                                             </div>
@@ -248,7 +248,7 @@ const CourseDetails = ({
 
                                             {/* Review Replies */}
                                             {item.commentReplies.map((i: any, replyIndex: number) => (
-                                                <div key={replyIndex} className="ml-16 mt-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700">
+                                                <div key={replyIndex} className="ml-16 mt-4 pl-4 border-l-2 border-border">
                                                     <div className="flex items-start space-x-4">
                                                         <div className="flex-shrink-0">
                                                     <Image
@@ -265,15 +265,15 @@ const CourseDetails = ({
                                                 </div>
                                                         <div className="flex-1">
                                                             <div className="flex items-center space-x-2 mb-2">
-                                                                <h5 className="font-semibold text-gray-900 dark:text-white">
+                                                                <h5 className="font-semibold text-foreground">
                                                                     {i.user.name}
                                                                 </h5>
                                                                 <VscVerifiedFilled className="text-blue-500 w-5 h-5" />
                                                             </div>
-                                                            <p className="text-gray-700 dark:text-gray-300 mb-2">
+                                                            <p className="text-foreground/90 mb-2">
                                                                 {i.question}
                                                             </p>
-                                                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                                                            <p className="text-sm text-muted-foreground">
                                                                 {format(i.createdAt)}
                                                             </p>
                                                         </div>
@@ -291,21 +291,21 @@ const CourseDetails = ({
                     <div className="lg:col-span-1">
                         <div className="sticky top-8 space-y-6">
                             {/* Video Player */}
-                            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                            <div className="bg-card rounded-xl border border-border shadow-soft overflow-hidden">
                             <CoursePlayer videoUrl={data?.demoUrl} title={data?.title} />
                             </div>
 
                             {/* Pricing Card */}
-                            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                            <div className="bg-card rounded-xl border border-border shadow-soft p-6">
                                 <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-3xl font-bold text-gray-900 dark:text-white">
+                                    <h3 className="text-3xl font-bold text-foreground">
                                         {data.price === 0 ? "Free" : `$${data.price}`}
                                     </h3>
                                     <div className="flex items-center space-x-2">
-                                        <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
+                                        <span className="text-lg text-muted-foreground line-through">
                                             ${data.estimatedPrice}
                                         </span>
-                                        <span className="px-2 py-1 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300 rounded-full text-sm font-medium">
+                                        <span className="px-2 py-1 bg-destructive/10 text-destructive rounded-full text-sm font-medium">
                                             {discountPercentagePrice}% Off
                                         </span>
                                     </div>
@@ -336,19 +336,19 @@ const CourseDetails = ({
                                 <div className="space-y-3">
                                     <div className="flex items-center space-x-3">
                                         <FiCheckCircle className="w-5 h-5 text-green-500" />
-                                        <span className="text-gray-700 dark:text-gray-300">Source code included</span>
+                                        <span className="text-foreground/90">Source code included</span>
                                     </div>
                                     <div className="flex items-center space-x-3">
                                         <FiCheckCircle className="w-5 h-5 text-green-500" />
-                                        <span className="text-gray-700 dark:text-gray-300">Full lifetime access</span>
+                                        <span className="text-foreground/90">Full lifetime access</span>
                                     </div>
                                     <div className="flex items-center space-x-3">
                                         <FiCheckCircle className="w-5 h-5 text-green-500" />
-                                        <span className="text-gray-700 dark:text-gray-300">Certificate of completion</span>
+                                        <span className="text-foreground/90">Certificate of completion</span>
                                     </div>
                                     <div className="flex items-center space-x-3">
                                         <FiCheckCircle className="w-5 h-5 text-green-500" />
-                                        <span className="text-gray-700 dark:text-gray-300">Premium Support</span>
+                                        <span className="text-foreground/90">Premium Support</span>
                                     </div>
                                 </div>
                             </div>
@@ -360,14 +360,14 @@ const CourseDetails = ({
             {/* Payment Modal */}
                 {open && (
                 <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
-                        <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
-                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    <div className="bg-card text-card-foreground rounded-xl border border-border shadow-2xl w-full max-w-md max-h-[90vh] overflow-y-auto">
+                        <div className="flex justify-between items-center p-6 border-b border-border">
+                            <h3 className="text-xl font-semibold text-foreground">
                                 Complete Purchase
                             </h3>
                             <button
                                     onClick={() => setOpen(false)}
-                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
+                                className="text-muted-foreground hover:text-foreground transition-colors"
                             >
                                 <IoCloseOutline size={24} />
                             </button>

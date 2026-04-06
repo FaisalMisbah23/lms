@@ -64,10 +64,10 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     return (
         <div className="space-y-6">
             <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                <h2 className="text-2xl font-bold text-foreground mb-2">
                     Profile Information
                 </h2>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-muted-foreground">
                     Update your personal information and profile picture
                 </p>
             </div>
@@ -76,7 +76,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                 {/* Avatar Section */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6">
                     <div className="relative">
-                        <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-gray-200 dark:border-gray-600">
+                        <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-border">
                             <img
                                 src={
                                     user?.avatar?.url ||
@@ -99,10 +99,10 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
                         />
                     </div>
                     <div>
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                        <h3 className="text-lg font-semibold text-foreground mb-1">
                             Profile Picture
                         </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">
+                        <p className="text-sm text-muted-foreground">
                             Click the camera icon to upload a new profile picture
                         </p>
                     </div>
@@ -110,40 +110,40 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
 
                 {/* Name Field */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-foreground">
                         Full Name
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FiUser className="h-5 w-5 text-gray-400" />
+                            <FiUser className="h-5 w-5 text-muted-foreground" />
                         </div>
                         <input
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Enter your full name"
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                            className="w-full pl-10 pr-4 py-3 border border-input rounded-lg focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 bg-background text-foreground"
                         />
                     </div>
                 </div>
 
                 {/* Email Field (Read-only) */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label className="block text-sm font-medium text-foreground">
                         Email Address
                     </label>
                     <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <FiMail className="h-5 w-5 text-gray-400" />
+                            <FiMail className="h-5 w-5 text-muted-foreground" />
                         </div>
                         <input
                             type="email"
                             value={user?.email || ""}
                             disabled
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                            className="w-full pl-10 pr-4 py-3 border border-input rounded-lg bg-muted/50 text-muted-foreground cursor-not-allowed"
                         />
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                    <p className="text-xs text-muted-foreground">
                         Email address cannot be changed
                     </p>
                 </div>

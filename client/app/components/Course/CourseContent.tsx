@@ -31,7 +31,7 @@ const CourseContent = ({ id, user }: Props) => {
 
     if (!data || data.length === 0) {
         return (
-            <div className="min-h-screen bg-background">
+            <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
                 <Header
                     open={open}
                     setOpen={setOpen}
@@ -56,7 +56,7 @@ const CourseContent = ({ id, user }: Props) => {
     const totalMinutes = totalDuration % 60;
 
     return (
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
                     <Header
                         open={open}
                         setOpen={setOpen}

@@ -50,15 +50,18 @@ const Profile: FC<Props> = ({ user }) => {
     }, [data, user.courses]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="min-h-screen bg-gradient-to-br from-background to-muted/30">
+            <div className="container-responsive py-8">
                 {/* Profile Header */}
                 <div className="mb-8">
                     <div className="text-center mb-8">
-                        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/15 mb-4">
+                            Account
+                        </div>
+                        <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-2">
                             My Profile
                         </h1>
-                        <p className="text-gray-600 dark:text-gray-300">
+                        <p className="text-muted-foreground max-w-lg mx-auto">
                             Manage your account settings and view your courses
                         </p>
                     </div>
@@ -79,17 +82,17 @@ const Profile: FC<Props> = ({ user }) => {
                     </div>
 
                     {/* Main Content */}
-                    <div className="lg:col-span-3">
-                        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+                        <div className="lg:col-span-3">
+                        <div className="bg-card rounded-xl border border-border shadow-soft p-6 sm:p-8">
                             {active === 1 && <ProfileInfo user={user} avatar={avatar} />}
                             {active === 2 && <ChangePassword />}
                             {active === 3 && (
                                 <div className="space-y-6">
                                     <div>
-                                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                                        <h2 className="text-2xl font-bold text-foreground mb-2">
                                             My Courses
                                         </h2>
-                                        <p className="text-gray-600 dark:text-gray-300">
+                                        <p className="text-muted-foreground">
                                             Your purchased courses and learning progress
                                         </p>
                                     </div>
@@ -99,10 +102,10 @@ const Profile: FC<Props> = ({ user }) => {
                                             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-4">
                                                 <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                                             </div>
-                                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                                            <h3 className="text-xl font-semibold text-foreground mb-2">
                                                 Loading Your Courses...
                                             </h3>
-                                            <p className="text-gray-600 dark:text-gray-300">
+                                            <p className="text-muted-foreground">
                                                 Please wait while we fetch your course data
                                             </p>
                                         </div>
@@ -123,10 +126,10 @@ const Profile: FC<Props> = ({ user }) => {
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                                                 </svg>
                                             </div>
-                                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                                            <h3 className="text-xl font-semibold text-foreground mb-2">
                                                 No Courses Yet
                                             </h3>
-                                            <p className="text-gray-600 dark:text-gray-300 mb-6">
+                                            <p className="text-muted-foreground mb-6">
                                                 You haven't purchased any courses yet. Start your learning journey today!
                                             </p>
                                             <a
